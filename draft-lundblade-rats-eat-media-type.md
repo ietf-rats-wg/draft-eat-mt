@@ -42,9 +42,8 @@ informative:
 
 --- abstract
 
-Evidence payloads used in Remote Attestation Procedures may
-require an associated media type for their conveyance, for
-example when used in RESTful APIs.
+Payloads used in Remote Attestation Procedures may require an associated media
+type for their conveyance, for example when used in RESTful APIs.
 
 This memo defines a media type to be used for EAT.
 
@@ -52,26 +51,39 @@ This memo defines a media type to be used for EAT.
 
 # Introduction
 
+Payloads used in Remote Attestation Procedures {{-RATS-ARCH}} may require an
+associated media type for their conveyance, for example when used in RESTful
+APIs.
 
 ~~~ aasvg
-+----------+           +----------+
-| Attester |           | Verifier |
-+----+-----+           +-----+----+
-     |                    |
-     |        EAT         |
-     |------------------> |
-     |         AR         |
-     | <----------------- |
-     |                    |
+.----.      .----------.          .----------.
+| RP |      | Attester |          | Verifier |
+'-+--'      '----+-----'          '-----+----'
+  |              |                      |
+  |              |     EAT(Evidence)    |
+  |              +--------------------->|
+  |              |     EAT(AR)          |
+  |              |<---------------------+
+  |              |                      |
+  |              |                      |
+  |    EAT(AR)   |                      |
+  |<-------------+                      |
+  |              |                      |
 ~~~
 {: #fig-api artwork-align="center"
-   title="EAT in REST API"}
+   title="Conveying RATS conceptual messages in REST APIs using EAT"}
+
+This memo defines a media type to be used for EAT {{-EAT}} payloads.
 
 ## Requirements Language
 
 This document uses the terms and concepts defined in {{-RATS-ARCH}}.
 
 {::boilerplate bcp14-tagged}
+
+# Examples
+
+TODO
 
 # Security Considerations {#seccons}
 
@@ -83,30 +95,30 @@ TODO
 
 [^to-be-removed]: RFC Editor: please replace RFC XXXX with this RFC number and remove this note.
 
-## Media Type
+## Media Types {#media-type}
 
-IANA is requested to add the following Media-Types to the
+IANA is requested to add the following media types to the
 "Media Types" registry {{!IANA.media-types}}.
 
-<cref>See CoRIM for profile</cref>
-
-| Name                         | Template                                 | Reference              |
+| Name | Template | Reference |
 | eat+cbor | application/eat+cbor | RFCXXXX, {{media-type}} |
-| eat+json | application/eat+json | RFCXXXX, {{media-type}} |
 {: #new-media-type align="left" title="New Media Types"}
 
+## application/eat+cbor Registration
+
 {:compact}
-Type name:
+Type name
 : application
 
-Subtype name:
+Subtype name
 : eat+cbor
 
-Required parameters:
-: none
+Required parameters
+: n/a
 
-Optional parameters:
-: none
+Optional parameters
+: "profile" (EAT profile in string format.  OIDs MUST use the dotted-decimal
+notation.)
 
 Encoding considerations:
 : binary (CBOR data item)
@@ -120,8 +132,10 @@ Interoperability considerations:
 Published specification:
 : {{media-type}} of RFC XXXX
 
-Applications that use this media type:
-: Clients and servers in the Internet of Things
+Applications that use this media type
+: Attesters, Verifiers, Endorsers and Reference-Value providers, Relying
+Parties that need to transfer EAT payloads over HTTP(S), CoAP(S), and other
+transports.
 
 Fragment identifier considerations:
 : The syntax and semantics of fragment identifiers is as specified for
@@ -129,8 +143,7 @@ Fragment identifier considerations:
   fragment identification syntax defined for "application/cbor".)
 
 Person & email address to contact for further information:
-: CoRE WG mailing list (core@ietf.org),
-  or IETF Applications and Real-Time Area (art@ietf.org)
+: RATS WG mailing list (rats@ietf.org), or IETF Security Area (saag@ietf.org)
 
 Intended usage:
 : COMMON
@@ -146,15 +159,18 @@ Provisional registration:
 
 ## Content-Format
 
+{:aside}
+> (**Issue**: need a way to pass the profile information when using content
+> formats.  A new CoAP option?)
+
 IANA is requested to register a Content-Format number in the
 "CoAP Content-Formats" sub-registry, within
 the "Constrained RESTful Environments (CoRE) Parameters"
 Registry {{!IANA.core-parameters}}, as follows:
 
-| Content-Type                             | Content Coding |
-ID   | Reference |
-| application/eat+cbor | -              | TBD1 | RFC XXXX  |
-{: align="left" title="New Content-Format"}
+| Content-Type | Content Coding | ID | Reference |
+| application/eat+cbor | - | TBD1 | RFC XXXX |
+{: align="left" title="New Content-Formats"}
 
 TBD1 is to be assigned from the space 256..999.
 
@@ -167,4 +183,4 @@ type" and the column "Content Coding" is called "Encoding".
 # Acknowledgments
 {:unnumbered}
 
-Someone
+TODO
