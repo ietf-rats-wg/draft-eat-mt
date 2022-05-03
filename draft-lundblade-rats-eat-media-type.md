@@ -35,6 +35,7 @@ author:
 
 normative:
   I-D.ietf-rats-eat: EAT
+  RFC7252: COAP
 
 informative:
   I-D.ietf-rats-architecture: RATS-ARCH
@@ -43,7 +44,7 @@ informative:
 
 Evidence payloads used in Remote Attestation Procedures may
 require an associated media type for their conveyance, for
-example when used in RESTful APIs. 
+example when used in RESTful APIs.
 
 This memo defines a media type to be used for EAT.
 
@@ -68,7 +69,7 @@ This memo defines a media type to be used for EAT.
 
 ## Requirements Language
 
-This document uses the terms and concepts defined in {{RATS-ARCH}}.
+This document uses the terms and concepts defined in {{-RATS-ARCH}}.
 
 {::boilerplate bcp14-tagged}
 
@@ -146,10 +147,9 @@ Provisional registration:
 ## Content-Format
 
 IANA is requested to register a Content-Format number in the
-{{content-formats ("CoAP
-Content-Formats")<IANA.core-parameters}} sub-registry, within
+"CoAP Content-Formats" sub-registry, within
 the "Constrained RESTful Environments (CoRE) Parameters"
-Registry {{IANA.core-parameters}}, as follows:
+Registry {{!IANA.core-parameters}}, as follows:
 
 | Content-Type                             | Content Coding |
 ID   | Reference |
@@ -158,7 +158,7 @@ ID   | Reference |
 
 TBD1 is to be assigned from the space 256..999.
 
-In the registry as defined by {{Section 12.3 of -coap}} at the
+In the registry as defined by {{Section 12.3 of -COAP}} at the
 time of writing, the column "Content-Type" is called "Media
 type" and the column "Content Coding" is called "Encoding".
 
