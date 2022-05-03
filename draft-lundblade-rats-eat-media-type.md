@@ -11,11 +11,6 @@ area: Security
 workgroup: RATS
 keyword: EAT, media type
 
-<!--
-consensus: true
-submissiontype: IETF
--->
-
 stand_alone: yes
 pi: [toc, sortrefs, symrefs]
 
