@@ -293,9 +293,10 @@ Registry {{!IANA.core-parameters}}, as follows:
 
 | Content-Type | Content Coding | ID | Reference |
 | application/eat+cbor | - | TBD1 | RFCthis |
+| application/eat+json | - | TBD2 | RFCthis |
 {: align="left" title="New Content-Formats"}
 
-TBD1 is to be assigned from the space 256..999.
+TBD1 and TBD2 are to be assigned from the space 256..999.
 
 In the registry as defined by {{Section 12.3 of -COAP}} at the
 time of writing, the column "Content-Type" is called "Media
