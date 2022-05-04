@@ -28,6 +28,15 @@ author:
    code: '64295'
    city: Darmstadt
    country: Germany
+ - ins: A. Fuchs
+   name: Andreas Fuchs
+   org: Fraunhofer Institute for Secure Information Technology
+   abbrev: Fraunhofer SIT
+   email: andreas.fuchs@sit.fraunhofer.de
+   street: Rheinstrasse 75
+   code: '64295'
+   city: Darmstadt
+   country: Germany
  - ins: T. Fossati
    name: Thomas Fossati
    organization: Arm Limited
@@ -45,7 +54,7 @@ informative:
 Payloads used in Remote Attestation Procedures may require an associated media
 type for their conveyance, for example when used in RESTful APIs.
 
-This memo defines a media type to be used for EAT.
+This memo defines a media type to be used for Entity Attestation Tokens (EAT).
 
 --- middle
 
@@ -73,7 +82,8 @@ APIs.
 {: #fig-api artwork-align="center"
    title="Conveying RATS conceptual messages in REST APIs using EAT"}
 
-This memo defines a media type to be used for EAT {{-EAT}} payloads.
+This memo defines a media type to be used for Entity Attestation Token (EAT)
+{{-EAT}} payloads.
 
 ## Requirements Language
 
