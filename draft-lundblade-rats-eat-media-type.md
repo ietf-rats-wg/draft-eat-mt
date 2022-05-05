@@ -65,25 +65,28 @@ associated media type for their conveyance, for example when used in RESTful
 APIs.
 
 ~~~ aasvg
-.----.      .----------.          .----------.
-| RP |      | Attester |          | Verifier |
-'-+--'      '----+-----'          '-----+----'
-  |              |                      |
-  |              |     EAT(Evidence)    |
-  |              +--------------------->|
-  |              |     EAT(AR)          |
-  |              |<---------------------+
-  |              |                      |
-  |              |                      |
-  |    EAT(AR)   |                      |
-  |<-------------+                      |
-  |              |                      |
+.----.          .----------.        .----------.
+| RP |          | Attester |        | Verifier |
+'-+--'          '----+-----'        '-----+----'
+  |                  | POST /verify       |
+  |                  | EAT(Evidence)      |
+  |                  +------------------->|
+  |                  |             200 OK |
+  |                  |   EAT(Att. Result) |
+  |                  |<-------------------+
+  |       POST /auth |                    |
+  | EAT(Att. Result) |                    |
+  |<-----------------+                    |
+  | 403 Forbidden    |                    |
+  +----------------->|                    |
+  |                  |                    |
 ~~~
 {: #fig-api artwork-align="center"
    title="Conveying RATS conceptual messages in REST APIs using EAT"}
 
 This memo defines a media type to be used for Entity Attestation Token (EAT)
-{{-EAT}} payloads.
+{{-EAT}} payloads independently of the RATS Conceptual Message in which they
+manifest themselves.
 
 ## Requirements Language
 
@@ -110,10 +113,10 @@ payload of a COSE Sign1 object), which makes extracting it from the EAT a
 cumbersome operation.
 
 Exposing the profile in a media type parameter provides a finer-grained and
-consistent type system to the extensible class of EAT profiles.  The
+scalable type system that matches the inherent extensibility of EAT.  The
 expectation being that a certain EAT profile automatically obtains a media type
 derived from the base `application/eat+cbor` and/or `application/eat+json` by
-populating the `profile` parameter with the right OID or URL.
+populating the `profile` parameter with the corresponding OID or URL.
 
 # Examples
 
@@ -126,7 +129,7 @@ parameter.
 
   POST /challenge-response/v1/session/1234567890
   Host: verifier.example
-  Accept: application/vnd.example.challenge-response-session+json
+  Accept: application/eat+cbor; profile=tag:ar4si.example,2021
   Content-Type: application/eat+cbor; profile=tag:evidence.example,2022
 
   ... CBOR-encoded EAT w/ profile=tag:evidence.example,2022 ...
@@ -134,29 +137,12 @@ parameter.
 << Response:
 
   HTTP/1.1 200 OK
-  Content-Type: application/vnd.example.challenge-response-session+json
+  Content-Type: application/eat+cbor; profile=tag:ar4si.example,2021
 
-  {
-    "nonce": "MTIzNDU2Nzg5MDEyMzQ1Njc4OTAxMjM0NTY3ODkwMTI=",
-    "expiry": "2030-10-12T07:20:50.52Z",
-    "accepting": [
-      "application/eat+json; profile=https://attestation.org/1.0.0",
-      "application/eat+cbor; profile=tag:evidence.example,2022",
-      "application/eat+cbor; profile=tag:evidence.example,2020"
-    ],
-    "state": "complete",
-    "evidence": {
-      "type": "application/eat+cbor; profile=tag:evidence.example,2022",
-      "value": "0oRDoQEmo...7HJp91mLE="
-    },
-    "attestation-results": {
-      "type": "application/eat+cbor; profile=tag:ar4si.example,2021",
-      "value": "0oRDoQEmo...1ormzZLxk="
-    }
-  }
+  ... CBOR-encoded EAT w/ profile=tag:ar4si.example,2021 ...
 ~~~
 {: #fig-ex1 artwork-align="center"
-   title="Challenge-Response Verification API"}
+   title="Example REST Verification API"}
 
 # Security Considerations {#seccons}
 
