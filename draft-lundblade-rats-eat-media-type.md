@@ -92,12 +92,13 @@ of -EAT}} defines the concept of EAT profiles.  Profiles are used to constrain
 the parameters that producers and consumers of a specific EAT profile need to
 understand in order to interoperate.  For example: the number and type of
 claims, which serialisation format, the supported signature schemes, etc.  EATs
-carry an in-band profile identifier using the Profile claim (see {{Section 3.20
-of -EAT}}).  The value of the Profile claim is either an OID or a URI.
+carry an in-band profile identifier using the `eat_profile` claim (see
+{{Section 3.20 of -EAT}}).  The value of the `eat_profile` claim is either an
+OID or a URI.
 
 The media type(s) defined in this document include an optional `profile`
-parameter that can be used to mirror the Profile claim of the transported EAT.
-Exposing the EAT profile at the API layer allows API routers to dispatch
+parameter that can be used to mirror the `eat_profile` claim of the transported
+EAT.  Exposing the EAT profile at the API layer allows API routers to dispatch
 payloads directly to the profile-specific processor without having to snoop
 into the request bodies.  This design also provides a finer-grained and
 scalable type system that matches the inherent extensibility of EAT.  The
@@ -166,7 +167,7 @@ Required parameters:
 
 Optional parameters:
 : "profile" (EAT profile in string format.  OIDs MUST use the dotted-decimal
-  notation.)
+  notation.  The parameter value is case-insensitive.)
 
 Encoding considerations:
 : binary
@@ -217,7 +218,7 @@ Required parameters:
 
 Optional parameters:
 : "profile" (EAT profile in string format.  OIDs MUST use the dotted-decimal
-  notation.)
+  notation.  The parameter value is case-insensitive.)
 
 Encoding considerations:
 : 8bit
