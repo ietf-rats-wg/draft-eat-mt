@@ -28,15 +28,6 @@ author:
    code: '64295'
    city: Darmstadt
    country: Germany
- - ins: A. Fuchs
-   name: Andreas Fuchs
-   org: Fraunhofer Institute for Secure Information Technology
-   abbrev: Fraunhofer SIT
-   email: andreas.fuchs@sit.fraunhofer.de
-   street: Rheinstrasse 75
-   code: '64295'
-   city: Darmstadt
-   country: Germany
  - ins: T. Fossati
    name: Thomas Fossati
    organization: Arm Limited
@@ -62,7 +53,7 @@ This memo defines a media type to be used for Entity Attestation Tokens (EAT).
 
 Payloads used in Remote Attestation Procedures {{-RATS-ARCH}} may require an
 associated media type for their conveyance, for example when used in RESTful
-APIs.
+APIs ({{fig-api}}).
 
 ~~~ aasvg
 .----.          .----------.        .----------.
@@ -104,15 +95,11 @@ claims, which serialisation format, the supported signature schemes, etc.  EATs
 carry an in-band profile identifier using the Profile claim (see {{Section 3.20
 of -EAT}}).  The value of the Profile claim is either an OID or a URI.
 
-The media type(s) defined in this document include an optional parameter that
-can be used to mirror the profile claim of the transported EAT.  This can be
-used as a routing hint for API front-ends to allow dispatching payloads
-directly to the profile-specific processor.  Note that the profile claim can be
-deeply nested (it is typically an element of a map carried in the CBOR-encoded
-payload of a COSE Sign1 object), which makes extracting it from the EAT a
-cumbersome operation.
-
-Exposing the profile in a media type parameter provides a finer-grained and
+The media type(s) defined in this document include an optional `profile`
+parameter that can be used to mirror the Profile claim of the transported EAT.
+Exposing the EAT profile at the API layer allows API routers to dispatch
+payloads directly to the profile-specific processor without having to snoop
+into the request bodies.  This design also provides a finer-grained and
 scalable type system that matches the inherent extensibility of EAT.  The
 expectation being that a certain EAT profile automatically obtains a media type
 derived from the base `application/eat+cbor` and/or `application/eat+json` by
@@ -140,13 +127,14 @@ parameter.
   Content-Type: application/eat+cbor; profile=tag:ar4si.example,2021
 
   ... CBOR-encoded EAT w/ profile=tag:ar4si.example,2021 ...
+
 ~~~
 {: #fig-ex1 artwork-align="center"
    title="Example REST Verification API"}
 
 # Security Considerations {#seccons}
 
-TODO
+The security consideration of {{-EAT}} apply in full.
 
 # IANA Considerations
 
@@ -178,7 +166,7 @@ Required parameters:
 
 Optional parameters:
 : "profile" (EAT profile in string format.  OIDs MUST use the dotted-decimal
-notation.)
+  notation.)
 
 Encoding considerations:
 : binary
@@ -194,8 +182,8 @@ Published specification:
 
 Applications that use this media type:
 : Attesters, Verifiers, Endorsers and Reference-Value providers, Relying
-Parties that need to transfer EAT payloads over HTTP(S), CoAP(S), and other
-transports.
+  Parties that need to transfer EAT payloads over HTTP(S), CoAP(S), and other
+  transports.
 
 Fragment identifier considerations:
 : n/a
@@ -229,7 +217,7 @@ Required parameters:
 
 Optional parameters:
 : "profile" (EAT profile in string format.  OIDs MUST use the dotted-decimal
-notation.)
+  notation.)
 
 Encoding considerations:
 : 8bit
@@ -245,8 +233,8 @@ Published specification:
 
 Applications that use this media type
 : Attesters, Verifiers, Endorsers and Reference-Value providers, Relying
-Parties that need to transfer EAT payloads over HTTP(S), CoAP(S), and other
-transports.
+  Parties that need to transfer EAT payloads over HTTP(S), CoAP(S), and other
+  transports.
 
 Fragment identifier considerations:
 : n/a
