@@ -30,7 +30,7 @@ author:
    country: Germany
  - ins: T. Fossati
    name: Thomas Fossati
-   organization: Arm Limited
+   organization: arm
    email: thomas.fossati@arm.com
 
 normative:
