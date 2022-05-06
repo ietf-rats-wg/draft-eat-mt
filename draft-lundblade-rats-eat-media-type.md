@@ -56,21 +56,21 @@ associated media type for their conveyance, for example when used in RESTful
 APIs ({{fig-api}}).
 
 ~~~ aasvg
-.----.          .----------.        .----------.
-| RP |          | Attester |        | Verifier |
-'-+--'          '----+-----'        '-----+----'
-  |                  | POST /verify       |
-  |                  | EAT(Evidence)      |
-  |                  +------------------->|
-  |                  |             200 OK |
-  |                  |   EAT(Att. Result) |
-  |                  |<-------------------+
-  |       POST /auth |                    |
-  | EAT(Att. Result) |                    |
-  |<-----------------+                    |
-  | 403 Forbidden    |                    |
-  +----------------->|                    |
-  |                  |                    |
+.----.            .----------.        .----------.
+| RP |            | Attester |        | Verifier |
+'-+--'            '----+-----'        '-----+----'
+  |                    | POST /verify       |
+  |                    | EAT(Evidence)      |
+  |                    +------------------->|
+  |                    |             200 OK |
+  |                    |   EAT(Att. Result) |
+  |                    |<-------------------+
+  |         POST /auth |                    |
+  |   EAT(Att. Result) |                    |
+  |<-------------------+                    |
+  | 201 Created        |                    |
+  +------------------->|                    |
+  |                    |                    |
 ~~~
 {: #fig-api artwork-align="center"
    title="Conveying RATS conceptual messages in REST APIs using EAT"}
