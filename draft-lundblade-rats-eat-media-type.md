@@ -34,11 +34,11 @@ author:
    email: thomas.fossati@arm.com
 
 normative:
-  I-D.ietf-rats-eat: EAT
-  RFC7252: COAP
+  EAT: I-D.ietf-rats-eat
+  CoAP: RFC7252
 
 informative:
-  I-D.ietf-rats-architecture: RATS-ARCH
+  RATS-Arch: I-D.ietf-rats-architecture
 
 entity:
   SELF: "RFCthis"
@@ -54,49 +54,50 @@ This memo defines a media type to be used for Entity Attestation Tokens (EAT).
 
 # Introduction
 
-Payloads used in Remote Attestation Procedures {{-RATS-ARCH}} may require an
+Payloads used in Remote Attestation Procedures {{RATS-Arch}} may require an
 associated media type for their conveyance, for example when used in RESTful
 APIs ({{fig-api-sd}}).
 
 ~~~ aasvg
-.----.            .----------.        .----------.
-| RP |            | Attester |        | Verifier |
-'-+--'            '----+-----'        '-----+----'
-  |                    | POST /verify       |
-  |                    | EAT(Evidence)      |
-  |                    +------------------->|
-  |                    |             200 OK |
-  |                    |   EAT(Att. Result) |
-  |                    |<-------------------+
-  |         POST /auth |                    |
-  |   EAT(Att. Result) |                    |
-  |<-------------------+                    |
-  | 201 Created        |                    |
-  +------------------->|                    |
-  |                    |                    |
+.----.                    .----------.                .----------.
+| RP |                    | Attester |                | Verifier |
+'-+--'                    '----+-----'                '-----+----'
+  |                            | POST /verify               |
+  |                            | EAT(Evidence)              |
+  |                            +--------------------------->|
+  |                            |                     200 OK |
+  |                            |   EAT(Attestation Results) |
+  |                            |<---------------------------+
+  |                 POST /auth |                            |
+  |   EAT(Attestation Results) |                            |
+  |<---------------------------+                            |
+  | 201 Created                |                            |
+  +--------------------------->|                            |
+  |                            |                            |
+  |                            |                            |
 ~~~
 {: #fig-api-sd artwork-align="center"
    title="Conveying RATS conceptual messages in REST APIs using EAT"}
 
 This memo defines a media type to be used for Entity Attestation Token (EAT)
-{{-EAT}} payloads independently of the RATS Conceptual Message in which they
+{{EAT}} payloads independently of the RATS Conceptual Message in which they
 manifest themselves.
 
 ## Requirements Language
 
-This document uses the terms and concepts defined in {{-RATS-ARCH}}.
+This document uses the terms and concepts defined in {{RATS-Arch}}.
 
 {::boilerplate bcp14-tagged}
 
 # A Media Type Parameter for EAT Profiles
 
 EAT is an open and flexible format.  To improve interoperability, {{Section 7
-of -EAT}} defines the concept of EAT profiles.  Profiles are used to constrain
+of EAT}} defines the concept of EAT profiles.  Profiles are used to constrain
 the parameters that producers and consumers of a specific EAT profile need to
 understand in order to interoperate.  For example: the number and type of
 claims, which serialisation format, the supported signature schemes, etc.  EATs
 carry an in-band profile identifier using the `eat_profile` claim (see
-{{Section 3.20 of -EAT}}).  The value of the `eat_profile` claim is either an
+{{Section 3.20 of EAT}}).  The value of the `eat_profile` claim is either an
 OID or a URI.
 
 The media type(s) defined in this document include an optional `profile`
@@ -139,7 +140,7 @@ In both cases the profile is carried as an explicit parameter.
 
 # Security Considerations {#seccons}
 
-The security consideration of {{-EAT}} apply in full.
+The security consideration of {{EAT}} apply in full.
 
 # IANA Considerations
 
@@ -277,9 +278,11 @@ Registry {{!IANA.core-parameters}}, as follows:
 
 TBD1 and TBD2 are to be assigned from the space 256..999.
 
-In the registry as defined by {{Section 12.3 of -COAP}} at the
-time of writing, the column "Content-Type" is called "Media
-type" and the column "Content Coding" is called "Encoding".
+In the registry as defined by {{Section 12.3 of CoAP}} at the time of writing,
+the column "Content-Type" is called "Media type" and the column "Content
+Coding" is called "Encoding".  [^remove]
+
+[^remove]: RFC editor: please remove this paragraph.
 
 --- back
 
