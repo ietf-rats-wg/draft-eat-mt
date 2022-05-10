@@ -40,6 +40,9 @@ normative:
 informative:
   I-D.ietf-rats-architecture: RATS-ARCH
 
+entity:
+  SELF: "RFCthis"
+
 --- abstract
 
 Payloads used in Remote Attestation Procedures may require an associated media
@@ -53,7 +56,7 @@ This memo defines a media type to be used for Entity Attestation Tokens (EAT).
 
 Payloads used in Remote Attestation Procedures {{-RATS-ARCH}} may require an
 associated media type for their conveyance, for example when used in RESTful
-APIs ({{fig-api}}).
+APIs ({{fig-api-sd}}).
 
 ~~~ aasvg
 .----.            .----------.        .----------.
@@ -72,7 +75,7 @@ APIs ({{fig-api}}).
   +------------------->|                    |
   |                    |                    |
 ~~~
-{: #fig-api artwork-align="center"
+{: #fig-api-sd artwork-align="center"
    title="Conveying RATS conceptual messages in REST APIs using EAT"}
 
 This memo defines a media type to be used for Entity Attestation Token (EAT)
@@ -108,30 +111,31 @@ populating the `profile` parameter with the corresponding OID or URL.
 
 # Examples
 
-The example in {{fig-ex1}} illustrates the usage of EAT media types in evidence
-and attestation results.  In both cases the profile is carried as an explicit
-parameter.
+The example in {{fig-rest-req}} illustrates the usage of EAT media types for
+transporting attestation evidence.
 
+~~~ http-message
+POST /challenge-response/v1/session/1234567890
+Host: verifier.example
+Accept: application/eat+cbor; profile=tag:ar4si.example,2021
+Content-Type: application/eat+cbor; profile=tag:evidence.example,2022
+
+[ CBOR-encoded EAT w/ profile=tag:evidence.example,2022 ]
 ~~~
->> Request:
+{: #fig-rest-req title="Example REST Verification API (request)"}
 
-  POST /challenge-response/v1/session/1234567890
-  Host: verifier.example
-  Accept: application/eat+cbor; profile=tag:ar4si.example,2021
-  Content-Type: application/eat+cbor; profile=tag:evidence.example,2022
+The example in {{fig-rest-rsp}} illustrates the usage of EAT media types for
+transporting attestation results.
 
-  ... CBOR-encoded EAT w/ profile=tag:evidence.example,2022 ...
+~~~ http-message
+HTTP/1.1 200 OK
+Content-Type: application/eat+cbor; profile=tag:ar4si.example,2021
 
-<< Response:
-
-  HTTP/1.1 200 OK
-  Content-Type: application/eat+cbor; profile=tag:ar4si.example,2021
-
-  ... CBOR-encoded EAT w/ profile=tag:ar4si.example,2021 ...
-
+[ CBOR-encoded EAT w/ profile=tag:ar4si.example,2021 ]
 ~~~
-{: #fig-ex1 artwork-align="center"
-   title="Example REST Verification API"}
+{: #fig-rest-rsp title="Example REST Verification API (response)"}
+
+In both cases the profile is carried as an explicit parameter.
 
 # Security Considerations {#seccons}
 
@@ -141,7 +145,7 @@ The security consideration of {{-EAT}} apply in full.
 
 [^to-be-removed]
 
-[^to-be-removed]: RFC Editor: please replace RFCthis with this RFC number and remove this note.
+[^to-be-removed]: RFC Editor: please replace {{&SELF}} with this RFC number and remove this note.
 
 ## Media Types {#media-type}
 
@@ -149,8 +153,8 @@ IANA is requested to add the following media types to the
 "Media Types" registry {{!IANA.media-types}}.
 
 | Name | Template | Reference |
-| eat+cbor | application/eat+cbor | RFCthis, {{media-type}} |
-| eat+json | application/eat+json | RFCthis, {{media-type}} |
+| eat+cbor | application/eat+cbor | {{&SELF}}, {{media-type}} |
+| eat+json | application/eat+json | {{&SELF}}, {{media-type}} |
 {: #new-media-type align="left" title="New Media Types"}
 
 ## application/eat+cbor Registration
@@ -173,13 +177,13 @@ Encoding considerations:
 : binary
 
 Security considerations:
-: {{seccons}} of RFCthis
+: {{seccons}} of {{&SELF}}
 
 Interoperability considerations:
 : n/a
 
 Published specification:
-: {{media-type}} of RFCthis
+: {{media-type}} of {{&SELF}}
 
 Applications that use this media type:
 : Attesters, Verifiers, Endorsers and Reference-Value providers, Relying
@@ -224,13 +228,13 @@ Encoding considerations:
 : 8bit
 
 Security considerations:
-: {{seccons}} of RFCthis
+: {{seccons}} of {{&SELF}}
 
 Interoperability considerations:
 : n/a
 
 Published specification:
-: {{media-type}} of RFCthis
+: {{media-type}} of {{&SELF}}
 
 Applications that use this media type
 : Attesters, Verifiers, Endorsers and Reference-Value providers, Relying
@@ -267,8 +271,8 @@ the "Constrained RESTful Environments (CoRE) Parameters"
 Registry {{!IANA.core-parameters}}, as follows:
 
 | Content-Type | Content Coding | ID | Reference |
-| application/eat+cbor | - | TBD1 | RFCthis |
-| application/eat+json | - | TBD2 | RFCthis |
+| application/eat+cbor | - | TBD1 | {{&SELF}} |
+| application/eat+json | - | TBD2 | {{&SELF}} |
 {: align="left" title="New Content-Formats"}
 
 TBD1 and TBD2 are to be assigned from the space 256..999.
