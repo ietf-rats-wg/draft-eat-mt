@@ -115,7 +115,7 @@ The example in {{fig-rest-req}} illustrates the usage of EAT media types for
 transporting attestation evidence.
 
 ~~~ http-message
-POST /challenge-response/v1/session/1234567890
+POST /challenge-response/v1/session/1234567890 HTTP/1.1
 Host: verifier.example
 Accept: application/eat+cbor; profile=tag:ar4si.example,2021
 Content-Type: application/eat+cbor; profile=tag:evidence.example,2022
