@@ -89,6 +89,16 @@ This document uses the terms and concepts defined in {{RATS-Arch}}.
 
 {::boilerplate bcp14-tagged}
 
+# EAT Types
+
+TODO high level description, reference EAT sections and mapping to media types.
+
+~~~ aasvg
+{::include misc/EAT-pieces.txt}
+~~~
+{: #fig-eat-types artwork-align="center"
+   title="EAT Types"}
+
 # A Media Type Parameter for EAT Profiles
 
 EAT is an open and flexible format.  To improve interoperability, {{Section 7
