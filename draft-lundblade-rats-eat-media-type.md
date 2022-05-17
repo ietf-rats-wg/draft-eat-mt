@@ -35,6 +35,7 @@ author:
 
 normative:
   EAT: I-D.ietf-rats-eat
+  UCCS: I-D.ietf-rats-uccs
   CoAP: RFC7252
 
 informative:
@@ -91,7 +92,9 @@ This document uses the terms and concepts defined in {{RATS-Arch}}.
 
 # EAT Types
 
-TODO high level description, reference EAT sections and mapping to media types.
+{{fig-eat-types}} illustrates the six EAT wire formats and how they relate to
+each other.  {{EAT}} defines four of them (CWT, JWT and DEB in its JSON and
+CBOR flavours), whilst {{UCCS}} defines the remaining two: UCCS and UJCS.
 
 ~~~ aasvg
 {::include misc/EAT-pieces.txt}
@@ -117,8 +120,8 @@ payloads directly to the profile-specific processor without having to snoop
 into the request bodies.  This design also provides a finer-grained and
 scalable type system that matches the inherent extensibility of EAT.  The
 expectation being that a certain EAT profile automatically obtains a media type
-derived from the base `application/eat+cbor` and/or `application/eat+json` by
-populating the `profile` parameter with the corresponding OID or URL.
+derived from the base (e.g., `application/eat-cwt)` by populating the `profile`
+parameter with the corresponding OID or URL.
 
 # Examples
 
@@ -128,8 +131,8 @@ transporting attestation evidence.
 ~~~ http-message
 POST /challenge-response/v1/session/1234567890 HTTP/1.1
 Host: verifier.example
-Accept: application/eat+cbor; profile=tag:ar4si.example,2021
-Content-Type: application/eat+cbor; profile=tag:evidence.example,2022
+Accept: application/eat-cwt; profile=tag:ar4si.example,2021
+Content-Type: application/eat-cwt; profile=tag:evidence.example,2022
 
 [ CBOR-encoded EAT w/ profile=tag:evidence.example,2022 ]
 ~~~
@@ -140,7 +143,7 @@ transporting attestation results.
 
 ~~~ http-message
 HTTP/1.1 200 OK
-Content-Type: application/eat+cbor; profile=tag:ar4si.example,2021
+Content-Type: application/eat-cwt; profile=tag:ar4si.example,2021
 
 [ CBOR-encoded EAT w/ profile=tag:ar4si.example,2021 ]
 ~~~
@@ -150,7 +153,7 @@ In both cases the profile is carried as an explicit parameter.
 
 # Security Considerations {#seccons}
 
-The security consideration of {{EAT}} apply in full.
+The security consideration of {{EAT}} and {{UCCS}} apply in full.
 
 # IANA Considerations
 
@@ -164,18 +167,22 @@ IANA is requested to add the following media types to the
 "Media Types" registry {{!IANA.media-types}}.
 
 | Name | Template | Reference |
-| eat+cbor | application/eat+cbor | {{&SELF}}, {{media-type}} |
-| eat+json | application/eat+json | {{&SELF}}, {{media-type}} |
+| EAT CWT | application/eat-cwt | {{&SELF}}, {{media-type-eat-cwt}} |
+| EAT JWT | application/eat-jwt | {{&SELF}}, {{media-type-eat-jwt}} |
+| EAT CBOR DEB | application/eat-deb+cbor | {{&SELF}}, {{media-type-deb-cbor}} |
+| EAT JSON DEB | application/eat-deb+json | {{&SELF}}, {{media-type-deb-json}} |
+| EAT UCCS | application/eat-ucs+cbor | {{&SELF}}, {{media-type-ucs-cbor}} |
+| EAT UJCS | application/eat-ucs+json | {{&SELF}}, {{media-type-ucs-json}} |
 {: #new-media-type align="left" title="New Media Types"}
 
-## application/eat+cbor Registration
+## application/eat-cwt Registration {#media-type-eat-cwt}
 
 {:compact}
 Type name:
 : application
 
 Subtype name:
-: eat+cbor
+: eat-cwt
 
 Required parameters:
 : n/a
@@ -219,14 +226,14 @@ Author/Change controller:
 Provisional registration:
 : <cref>maybe</cref>
 
-## application/eat+json Registration
+## application/eat-jwt Registration {#media-type-eat-jwt}
 
 {:compact}
 Type name:
 : application
 
 Subtype name:
-: eat+json
+: eat-jwt
 
 Required parameters:
 : n/a
@@ -237,6 +244,210 @@ Optional parameters:
 
 Encoding considerations:
 : 8bit
+
+Security considerations:
+: {{seccons}} of {{&SELF}}
+
+Interoperability considerations:
+: n/a
+
+Published specification:
+: {{media-type}} of {{&SELF}}
+
+Applications that use this media type
+: Attesters, Verifiers, Endorsers and Reference-Value providers, Relying
+  Parties that need to transfer EAT payloads over HTTP(S), CoAP(S), and other
+  transports.
+
+Fragment identifier considerations:
+: n/a
+
+Person & email address to contact for further information:
+: RATS WG mailing list (rats@ietf.org)
+
+Intended usage:
+: COMMON
+
+Restrictions on usage:
+: none
+
+Author/Change controller:
+: IETF
+
+Provisional registration:
+: <cref>maybe</cref>
+
+## application/eat-deb+cbor Registration {#media-type-deb-cbor}
+
+{:compact}
+Type name:
+: application
+
+Subtype name:
+: eat-deb+cbor
+
+Required parameters:
+: n/a
+
+Optional parameters:
+: "profile" (EAT profile in string format.  OIDs MUST use the dotted-decimal
+  notation.  The parameter value is case-insensitive.)
+
+Encoding considerations:
+: binary
+
+Security considerations:
+: {{seccons}} of {{&SELF}}
+
+Interoperability considerations:
+: n/a
+
+Published specification:
+: {{media-type}} of {{&SELF}}
+
+Applications that use this media type:
+: Attesters, Verifiers, Endorsers and Reference-Value providers, Relying
+  Parties that need to transfer EAT payloads over HTTP(S), CoAP(S), and other
+  transports.
+
+Fragment identifier considerations:
+: n/a
+
+Person & email address to contact for further information:
+: RATS WG mailing list (rats@ietf.org)
+
+Intended usage:
+: COMMON
+
+Restrictions on usage:
+: none
+
+Author/Change controller:
+: IETF
+
+Provisional registration:
+: <cref>maybe</cref>
+
+## application/eat-deb+json Registration {#media-type-deb-json}
+
+{:compact}
+Type name:
+: application
+
+Subtype name:
+: eat-deb+json
+
+Required parameters:
+: n/a
+
+Optional parameters:
+: "profile" (EAT profile in string format.  OIDs MUST use the dotted-decimal
+  notation.  The parameter value is case-insensitive.)
+
+Encoding considerations:
+: Same as {{!RFC7159}}
+
+Security considerations:
+: {{seccons}} of {{&SELF}}
+
+Interoperability considerations:
+: n/a
+
+Published specification:
+: {{media-type}} of {{&SELF}}
+
+Applications that use this media type
+: Attesters, Verifiers, Endorsers and Reference-Value providers, Relying
+  Parties that need to transfer EAT payloads over HTTP(S), CoAP(S), and other
+  transports.
+
+Fragment identifier considerations:
+: n/a
+
+Person & email address to contact for further information:
+: RATS WG mailing list (rats@ietf.org)
+
+Intended usage:
+: COMMON
+
+Restrictions on usage:
+: none
+
+Author/Change controller:
+: IETF
+
+Provisional registration:
+: <cref>maybe</cref>
+
+## application/eat-ucs+cbor Registration {#media-type-ucs-cbor}
+
+{:compact}
+Type name:
+: application
+
+Subtype name:
+: eat-ucs+cbor
+
+Required parameters:
+: n/a
+
+Optional parameters:
+: "profile" (EAT profile in string format.  OIDs MUST use the dotted-decimal
+  notation.  The parameter value is case-insensitive.)
+
+Encoding considerations:
+: binary
+
+Security considerations:
+: {{seccons}} of {{&SELF}}
+
+Interoperability considerations:
+: n/a
+
+Published specification:
+: {{media-type}} of {{&SELF}}
+
+Applications that use this media type:
+: Attesters, Verifiers, Endorsers and Reference-Value providers, Relying
+  Parties that need to transfer EAT payloads over HTTP(S), CoAP(S), and other
+  transports.
+
+Fragment identifier considerations:
+: n/a
+
+Person & email address to contact for further information:
+: RATS WG mailing list (rats@ietf.org)
+
+Intended usage:
+: COMMON
+
+Restrictions on usage:
+: none
+
+Author/Change controller:
+: IETF
+
+Provisional registration:
+: <cref>maybe</cref>
+
+## application/eat-ucs+json Registration {#media-type-ucs-json}
+
+{:compact}
+Type name:
+: application
+
+Subtype name:
+: eat-ucs+json
+
+Required parameters:
+: n/a
+
+Optional parameters:
+: "profile" (EAT profile in string format.  OIDs MUST use the dotted-decimal
+  notation.  The parameter value is case-insensitive.)
+
+Encoding considerations:
+: Same as {{!RFC7159}}
 
 Security considerations:
 : {{seccons}} of {{&SELF}}
@@ -282,11 +493,15 @@ the "Constrained RESTful Environments (CoRE) Parameters"
 Registry {{!IANA.core-parameters}}, as follows:
 
 | Content-Type | Content Coding | ID | Reference |
-| application/eat+cbor | - | TBD1 | {{&SELF}} |
-| application/eat+json | - | TBD2 | {{&SELF}} |
+| application/eat-cwt | - | TBD1 | {{&SELF}} |
+| application/eat-jwt | - | TBD2 | {{&SELF}} |
+| application/eat-deb+cbor | - | TBD3 | {{&SELF}} |
+| application/eat-deb+json | - | TBD4 | {{&SELF}} |
+| application/eat-ucs+cbor | - | TBD5 | {{&SELF}} |
+| application/eat-ucs+json | - | TBD6 | {{&SELF}} |
 {: align="left" title="New Content-Formats"}
 
-TBD1 and TBD2 are to be assigned from the space 256..999.
+TBD1..6 are to be assigned from the space 256..999.
 
 In the registry as defined by {{Section 12.3 of CoAP}} at the time of writing,
 the column "Content-Type" is called "Media type" and the column "Content
