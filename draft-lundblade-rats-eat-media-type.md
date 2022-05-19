@@ -113,7 +113,7 @@ carry an in-band profile identifier using the `eat_profile` claim (see
 {{Section 3.20 of EAT}}).  The value of the `eat_profile` claim is either an
 OID or a URI.
 
-The media type(s) defined in this document include an optional `profile`
+The media types defined in this document include an optional `profile`
 parameter that can be used to mirror the `eat_profile` claim of the transported
 EAT.  Exposing the EAT profile at the API layer allows API routers to dispatch
 payloads directly to the profile-specific processor without having to snoop
