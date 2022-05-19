@@ -49,7 +49,7 @@ entity:
 Payloads used in Remote Attestation Procedures may require an associated media
 type for their conveyance, for example when used in RESTful APIs.
 
-This memo defines a media type to be used for Entity Attestation Tokens (EAT).
+This memo defines media types to be used for Entity Attestation Tokens (EAT).
 
 --- middle
 
@@ -80,7 +80,7 @@ APIs ({{fig-api-sd}}).
 {: #fig-api-sd artwork-align="center"
    title="Conveying RATS conceptual messages in REST APIs using EAT"}
 
-This memo defines a media type to be used for Entity Attestation Token (EAT)
+This memo defines media types to be used for Entity Attestation Token (EAT)
 {{EAT}} payloads independently of the RATS Conceptual Message in which they
 manifest themselves.
 
