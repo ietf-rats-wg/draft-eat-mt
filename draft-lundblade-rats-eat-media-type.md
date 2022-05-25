@@ -110,7 +110,7 @@ the parameters that producers and consumers of a specific EAT profile need to
 understand in order to interoperate.  For example: the number and type of
 claims, which serialisation format, the supported signature schemes, etc.  EATs
 carry an in-band profile identifier using the `eat_profile` claim (see
-{{Section 3.20 of EAT}}).  The value of the `eat_profile` claim is either an
+{{Section 4.3.3 of EAT}}).  The value of the `eat_profile` claim is either an
 OID or a URI.
 
 The media types defined in this document include an optional `profile`
