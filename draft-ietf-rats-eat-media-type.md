@@ -131,10 +131,10 @@ transporting attestation evidence.
 ~~~ http-message
 POST /challenge-response/v1/session/1234567890 HTTP/1.1
 Host: verifier.example
-Accept: application/eat-cwt; profile=tag:ar4si.example,2021
-Content-Type: application/eat-cwt; profile=tag:evidence.example,2022
+Accept: application/eat-cwt; profile="tag:ar4si.example,2021"
+Content-Type: application/eat-cwt; profile="tag:evidence.example,2022"
 
-[ CBOR-encoded EAT w/ profile=tag:evidence.example,2022 ]
+[ CBOR-encoded EAT w/ profile="tag:evidence.example,2022" ]
 ~~~
 {: #fig-rest-req title="Example REST Verification API (request)"}
 
@@ -143,9 +143,9 @@ transporting attestation results.
 
 ~~~ http-message
 HTTP/1.1 200 OK
-Content-Type: application/eat-cwt; profile=tag:ar4si.example,2021
+Content-Type: application/eat-cwt; profile="tag:ar4si.example,2021"
 
-[ CBOR-encoded EAT w/ profile=tag:ar4si.example,2021 ]
+[ CBOR-encoded EAT w/ profile="tag:ar4si.example,2021" ]
 ~~~
 {: #fig-rest-rsp title="Example REST Verification API (response)"}
 
