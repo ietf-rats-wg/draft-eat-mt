@@ -3,7 +3,7 @@ v: 3
 
 title: EAT Media Types
 abbrev: EAT Media Types
-docname: draft-lundblade-rats-eat-media-type-latest
+docname: draft-ietf-rats-eat-media-type-latest
 category: std
 
 ipr: trust200902
