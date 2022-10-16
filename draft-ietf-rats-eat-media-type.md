@@ -4,11 +4,12 @@ v: 3
 title: EAT Media Types
 abbrev: EAT Media Types
 docname: draft-ietf-rats-eat-media-type-latest
+submissionType: IETF
 category: std
 
 ipr: trust200902
-area: Security
-workgroup: RATS
+area: "Security"
+workgroup: "Remote ATtestation ProcedureS"
 keyword: EAT, media type
 
 stand_alone: yes
@@ -40,6 +41,9 @@ normative:
 
 informative:
   RATS-Arch: I-D.ietf-rats-architecture
+  BUILD-W-HTTP: BCP56
+  REST-IoT: I-D.irtf-t2trg-rest-iot
+  RFC4151:
 
 entity:
   SELF: "RFCthis"
@@ -82,7 +86,10 @@ APIs ({{fig-api-sd}}).
 
 This memo defines media types to be used for Entity Attestation Token (EAT)
 {{EAT}} payloads independently of the RATS Conceptual Message in which they
-manifest themselves.
+manifest themselves.  The objective is to give protocol, API and application
+designers a number of readily available and reusable media types for
+integrating EAT-based messages in their flows, for example when using HTTP
+{{BUILD-W-HTTP}} or CoAP {{REST-IoT}}.
 
 ## Requirements Language
 
@@ -93,8 +100,9 @@ This document uses the terms and concepts defined in {{RATS-Arch}}.
 # EAT Types
 
 {{fig-eat-types}} illustrates the six EAT wire formats and how they relate to
-each other.  {{EAT}} defines four of them (CWT, JWT and DEB in its JSON and
-CBOR flavours), whilst {{UCCS}} defines the remaining two: UCCS and UJCS.
+each other.  {{EAT}} defines four of them (CWT, JWT and Detached EAT Bundle in
+its JSON and CBOR flavours), whilst {{UCCS}} defines the remaining two: UCCS
+and UJCS.
 
 ~~~ aasvg
 {::include misc/EAT-pieces.txt}
@@ -104,37 +112,41 @@ CBOR flavours), whilst {{UCCS}} defines the remaining two: UCCS and UJCS.
 
 # A Media Type Parameter for EAT Profiles
 
-EAT is an open and flexible format.  To improve interoperability, {{Section 7
+EAT is an open and flexible format.  To improve interoperability, {{Section 6
 of EAT}} defines the concept of EAT profiles.  Profiles are used to constrain
 the parameters that producers and consumers of a specific EAT profile need to
 understand in order to interoperate.  For example: the number and type of
 claims, which serialisation format, the supported signature schemes, etc.  EATs
 carry an in-band profile identifier using the `eat_profile` claim (see
-{{Section 4.3.3 of EAT}}).  The value of the `eat_profile` claim is either an
+{{Section 4.3.2 of EAT}}).  The value of the `eat_profile` claim is either an
 OID or a URI.
 
-The media types defined in this document include an optional `profile`
-parameter that can be used to mirror the `eat_profile` claim of the transported
+The media types defined in this document include an optional `eat_profile`
+parameter that can be used to mirror the homonymous claim of the transported
 EAT.  Exposing the EAT profile at the API layer allows API routers to dispatch
 payloads directly to the profile-specific processor without having to snoop
 into the request bodies.  This design also provides a finer-grained and
 scalable type system that matches the inherent extensibility of EAT.  The
 expectation being that a certain EAT profile automatically obtains a media type
-derived from the base (e.g., `application/eat-cwt)` by populating the `profile`
-parameter with the corresponding OID or URL.
+derived from the base (e.g., `application/eat-cwt)` by populating the
+`eat_profile` parameter with the corresponding OID or URL.
 
 # Examples
 
 The example in {{fig-rest-req}} illustrates the usage of EAT media types for
-transporting attestation evidence.
+transporting attestation evidence as well as negotiating the acceptable format
+of the attestation result.
 
 ~~~ http-message
+# NOTE: '\' line wrapping per RFC 8792
+
 POST /challenge-response/v1/session/1234567890 HTTP/1.1
 Host: verifier.example
-Accept: application/eat-cwt; profile="tag:ar4si.example,2021"
-Content-Type: application/eat-cwt; profile="tag:evidence.example,2022"
+Accept: application/eat-cwt; eat_profile="tag:ar4si.example,2021"
+Content-Type: application/eat-cwt; \
+              eat_profile="tag:evidence.example,2022"
 
-[ CBOR-encoded EAT w/ profile="tag:evidence.example,2022" ]
+[ CBOR-encoded EAT w/ eat_profile="tag:evidence.example,2022" ]
 ~~~
 {: #fig-rest-req title="Example REST Verification API (request)"}
 
@@ -142,14 +154,18 @@ The example in {{fig-rest-rsp}} illustrates the usage of EAT media types for
 transporting attestation results.
 
 ~~~ http-message
-HTTP/1.1 200 OK
-Content-Type: application/eat-cwt; profile="tag:ar4si.example,2021"
+# NOTE: '\' line wrapping per RFC 8792
 
-[ CBOR-encoded EAT w/ profile="tag:ar4si.example,2021" ]
+HTTP/1.1 200 OK
+Content-Type: application/eat-cwt; \
+              eat_profile="tag:ar4si.example,2021"
+
+[ CBOR-encoded EAT w/ eat_profile="tag:ar4si.example,2021" ]
 ~~~
 {: #fig-rest-rsp title="Example REST Verification API (response)"}
 
-In both cases the profile is carried as an explicit parameter.
+In both cases, a tag URI {{RFC4151}} identifying the profile is carried as an
+explicit parameter.
 
 # Security Considerations {#seccons}
 
@@ -169,8 +185,8 @@ IANA is requested to add the following media types to the
 | Name | Template | Reference |
 | EAT CWT | application/eat-cwt | {{&SELF}}, {{media-type-eat-cwt}} |
 | EAT JWT | application/eat-jwt | {{&SELF}}, {{media-type-eat-jwt}} |
-| EAT CBOR DEB | application/eat-deb+cbor | {{&SELF}}, {{media-type-deb-cbor}} |
-| EAT JSON DEB | application/eat-deb+json | {{&SELF}}, {{media-type-deb-json}} |
+| Detached EAT Bundle CBOR | application/eat-bun+cbor | {{&SELF}}, {{media-type-deb-cbor}} |
+| Detached EAT Bundle JSON | application/eat-bun+json | {{&SELF}}, {{media-type-deb-json}} |
 | EAT UCCS | application/eat-ucs+cbor | {{&SELF}}, {{media-type-ucs-cbor}} |
 | EAT UJCS | application/eat-ucs+json | {{&SELF}}, {{media-type-ucs-json}} |
 {: #new-media-type align="left" title="New Media Types"}
@@ -188,8 +204,8 @@ Required parameters:
 : n/a
 
 Optional parameters:
-: "profile" (EAT profile in string format.  OIDs MUST use the dotted-decimal
-  notation.  The parameter value is case-insensitive.)
+: "eat_profile" (EAT profile in string format.  OIDs MUST use the
+  dotted-decimal notation.  The parameter value is case-insensitive.)
 
 Encoding considerations:
 : binary
@@ -239,8 +255,8 @@ Required parameters:
 : n/a
 
 Optional parameters:
-: "profile" (EAT profile in string format.  OIDs MUST use the dotted-decimal
-  notation.  The parameter value is case-insensitive.)
+: "eat_profile" (EAT profile in string format.  OIDs MUST use the
+  dotted-decimal notation.  The parameter value is case-insensitive.)
 
 Encoding considerations:
 : 8bit
@@ -277,21 +293,21 @@ Author/Change controller:
 Provisional registration:
 : <cref>maybe</cref>
 
-## application/eat-deb+cbor Registration {#media-type-deb-cbor}
+## application/eat-bun+cbor Registration {#media-type-deb-cbor}
 
 {:compact}
 Type name:
 : application
 
 Subtype name:
-: eat-deb+cbor
+: eat-bun+cbor
 
 Required parameters:
 : n/a
 
 Optional parameters:
-: "profile" (EAT profile in string format.  OIDs MUST use the dotted-decimal
-  notation.  The parameter value is case-insensitive.)
+: "eat_profile" (EAT profile in string format.  OIDs MUST use the
+  dotted-decimal notation.  The parameter value is case-insensitive.)
 
 Encoding considerations:
 : binary
@@ -328,21 +344,21 @@ Author/Change controller:
 Provisional registration:
 : <cref>maybe</cref>
 
-## application/eat-deb+json Registration {#media-type-deb-json}
+## application/eat-bun+json Registration {#media-type-deb-json}
 
 {:compact}
 Type name:
 : application
 
 Subtype name:
-: eat-deb+json
+: eat-bun+json
 
 Required parameters:
 : n/a
 
 Optional parameters:
-: "profile" (EAT profile in string format.  OIDs MUST use the dotted-decimal
-  notation.  The parameter value is case-insensitive.)
+: "eat_profile" (EAT profile in string format.  OIDs MUST use the
+  dotted-decimal notation.  The parameter value is case-insensitive.)
 
 Encoding considerations:
 : Same as {{!RFC7159}}
@@ -392,8 +408,8 @@ Required parameters:
 : n/a
 
 Optional parameters:
-: "profile" (EAT profile in string format.  OIDs MUST use the dotted-decimal
-  notation.  The parameter value is case-insensitive.)
+: "eat_profile" (EAT profile in string format.  OIDs MUST use the
+  dotted-decimal notation.  The parameter value is case-insensitive.)
 
 Encoding considerations:
 : binary
@@ -443,8 +459,8 @@ Required parameters:
 : n/a
 
 Optional parameters:
-: "profile" (EAT profile in string format.  OIDs MUST use the dotted-decimal
-  notation.  The parameter value is case-insensitive.)
+: "eat_profile" (EAT profile in string format.  OIDs MUST use the
+  dotted-decimal notation.  The parameter value is case-insensitive.)
 
 Encoding considerations:
 : Same as {{!RFC7159}}
@@ -484,8 +500,9 @@ Provisional registration:
 ## Content-Format
 
 {:aside}
-> (**Issue**: need a way to pass the profile information when using content
-> formats.  A new CoAP option?)
+> **Issue**: for symmetry reasons we may need a way to pass the profile
+> information when using content formats too. Early proposal for a new CoAP
+> option: {{?I-D.fossati-core-parametrized-cf}}
 
 IANA is requested to register a Content-Format number in the
 "CoAP Content-Formats" sub-registry, within
@@ -495,8 +512,8 @@ Registry {{!IANA.core-parameters}}, as follows:
 | Content-Type | Content Coding | ID | Reference |
 | application/eat-cwt | - | TBD1 | {{&SELF}} |
 | application/eat-jwt | - | TBD2 | {{&SELF}} |
-| application/eat-deb+cbor | - | TBD3 | {{&SELF}} |
-| application/eat-deb+json | - | TBD4 | {{&SELF}} |
+| application/eat-bun+cbor | - | TBD3 | {{&SELF}} |
+| application/eat-bun+json | - | TBD4 | {{&SELF}} |
 | application/eat-ucs+cbor | - | TBD5 | {{&SELF}} |
 | application/eat-ucs+json | - | TBD6 | {{&SELF}} |
 {: align="left" title="New Content-Formats"}
@@ -509,9 +526,33 @@ Coding" is called "Encoding".  [^remove]
 
 [^remove]: RFC editor: please remove this paragraph.
 
+# Changelog
+
+[^remove-sec]
+
+[^remove-sec]: RFC editor: please remove this section
+
+## -01
+
+* Rename `profile` to `eat_profile` for consistency with EAT
+  ([Issue#4](https://github.com/ietf-rats-wg/draft-eat-mt/issues/4))
+
+* The DEB acronym is gone: shorthand is now "bun" from bundle
+  ([Issue#8](https://github.com/ietf-rats-wg/draft-eat-mt/issues/8))
+
+* Incorporate editorial suggestions from Carl and Dave
+  ([Issue#7](https://github.com/ietf-rats-wg/draft-eat-mt/issues/7),
+  [Issue#9](https://github.com/ietf-rats-wg/draft-eat-mt/issues/9))
+
 --- back
 
 # Acknowledgments
 {:unnumbered}
 
-TODO
+Thank you
+Carl Wallace,
+Dave Thaler,
+Michael Richardson
+for your comments and suggestions.
+
+
