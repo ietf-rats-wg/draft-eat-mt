@@ -70,23 +70,36 @@ autoscale: true
 
 # Next Steps (find the bug, win a beer!)
 
+[.column]
+
 ```golang
-waitChan := make(chan bool)
+func nextSteps(earlyAllocation bool) {
+	waitChan := make(chan bool)
 
-if earlyAllocation == true {
-	go IANA(waitChan)
-}
-
-for _, issue := range openIssues {
-	if issue.isBlocking {
-		sendPR(issue)
+	if earlyAllocation {
+		go IANA(waitChan)
 	}
+
+	for _, issue := range openIssues {
+		if issue.isBlocking {
+			sendPR(issue)
+		}
+	}
+
+	<-waitChan
+
+	submit(0x02)
 }
-
-<-waitChan
-
-submit(02)
-
 ```
 
- 
+[.column]
+
+```golang
+func IANA(waitChan chan bool) {
+	fmt.Println("do it!")
+
+	// actually do it
+
+	waitChan <- true
+}
+```

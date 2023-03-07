@@ -36,11 +36,13 @@ author:
 
 normative:
   EAT: I-D.ietf-rats-eat
+  CWT: RFC8392
   UCCS: I-D.ietf-rats-uccs
   CoAP: RFC7252
+  MediaTypes: RFC6838
 
 informative:
-  RATS-Arch: I-D.ietf-rats-architecture
+  RATS-Arch: RFC9334
   BUILD-W-HTTP: BCP56
   REST-IoT: I-D.irtf-t2trg-rest-iot
   RFC4151:
@@ -128,7 +130,7 @@ payloads directly to the profile-specific processor without having to snoop
 into the request bodies.  This design also provides a finer-grained and
 scalable type system that matches the inherent extensibility of EAT.  The
 expectation being that a certain EAT profile automatically obtains a media type
-derived from the base (e.g., `application/eat-cwt)` by populating the
+derived from the base (e.g., `application/eat+cwt)` by populating the
 `eat_profile` parameter with the corresponding OID or URL.
 
 # Examples
@@ -142,8 +144,8 @@ of the attestation result.
 
 POST /challenge-response/v1/session/1234567890 HTTP/1.1
 Host: verifier.example
-Accept: application/eat-cwt; eat_profile="tag:ar4si.example,2021"
-Content-Type: application/eat-cwt; \
+Accept: application/eat+cwt; eat_profile="tag:ar4si.example,2021"
+Content-Type: application/eat+cwt; \
               eat_profile="tag:evidence.example,2022"
 
 [ CBOR-encoded EAT w/ eat_profile="tag:evidence.example,2022" ]
@@ -157,7 +159,7 @@ transporting attestation results.
 # NOTE: '\' line wrapping per RFC 8792
 
 HTTP/1.1 200 OK
-Content-Type: application/eat-cwt; \
+Content-Type: application/eat+cwt; \
               eat_profile="tag:ar4si.example,2021"
 
 [ CBOR-encoded EAT w/ eat_profile="tag:ar4si.example,2021" ]
@@ -177,28 +179,68 @@ The security consideration of {{EAT}} and {{UCCS}} apply in full.
 
 [^to-be-removed]: RFC Editor: please replace {{&SELF}} with this RFC number and remove this note.
 
+## `+cwt` Structured Syntax Suffix
+
+IANA is requested to register the `+cwt` structured syntax suffix in the
+"Structured Syntax Suffixes" registry {{!IANA.media-type-structured-suffix}} in
+the manner described in {{MediaTypes}}, which can be used to indicate that the
+media type is encoded as a CWT.
+
+### Registry Contents
+
+{:compact}
+Name:
+: CBOR Web Token (CWT)
+
++suffix:
+: +cwt
+
+References:
+: {{CWT}}
+
+Encoding Considerations:
+: binary
+
+Interoperability Considerations:
+: N/A
+
+Fragment Identifier Considerations:
+: The syntax and semantics of fragment identifiers specified for +cwt SHOULD be
+  as specified for `application/cwt`.  (At publication of this document, there
+  is no fragment identification syntax defined for `application/cwt`.)
+
+Security Considerations:
+: See {{Section 8 of CWT}}
+
+Contact:
+: RATS WG mailing list (rats@ietf.org), or IETF Security Area (saag@ietf.org)
+
+Author/Change Controller:
+: Remote ATtestation ProcedureS (RATS) Working Group.
+  The IESG has change control over this registration.
+
 ## Media Types {#media-type}
 
 IANA is requested to add the following media types to the
 "Media Types" registry {{!IANA.media-types}}.
 
 | Name | Template | Reference |
-| EAT CWT | application/eat-cwt | {{&SELF}}, {{media-type-eat-cwt}} |
-| EAT JWT | application/eat-jwt | {{&SELF}}, {{media-type-eat-jwt}} |
+| EAT CWT | application/eat+cwt | {{&SELF}}, {{media-type-eat-cwt}} |
+| EAT JWT | application/eat+jwt | {{&SELF}}, {{media-type-eat-jwt}} |
 | Detached EAT Bundle CBOR | application/eat-bun+cbor | {{&SELF}}, {{media-type-deb-cbor}} |
 | Detached EAT Bundle JSON | application/eat-bun+json | {{&SELF}}, {{media-type-deb-json}} |
 | EAT UCCS | application/eat-ucs+cbor | {{&SELF}}, {{media-type-ucs-cbor}} |
 | EAT UJCS | application/eat-ucs+json | {{&SELF}}, {{media-type-ucs-json}} |
 {: #new-media-type align="left" title="New Media Types"}
 
-## application/eat-cwt Registration {#media-type-eat-cwt}
+## application/eat+cwt Registration {#media-type-eat-cwt}
 
 {:compact}
 Type name:
 : application
 
 Subtype name:
-: eat-cwt
+: eat+cwt
 
 Required parameters:
 : n/a
@@ -242,14 +284,14 @@ Author/Change controller:
 Provisional registration:
 : <cref>maybe</cref>
 
-## application/eat-jwt Registration {#media-type-eat-jwt}
+## application/eat+jwt Registration {#media-type-eat-jwt}
 
 {:compact}
 Type name:
 : application
 
 Subtype name:
-: eat-jwt
+: eat+jwt
 
 Required parameters:
 : n/a
@@ -510,8 +552,8 @@ the "Constrained RESTful Environments (CoRE) Parameters"
 Registry {{!IANA.core-parameters}}, as follows:
 
 | Content-Type | Content Coding | ID | Reference |
-| application/eat-cwt | - | TBD1 | {{&SELF}} |
-| application/eat-jwt | - | TBD2 | {{&SELF}} |
+| application/eat+cwt | - | TBD1 | {{&SELF}} |
+| application/eat+jwt | - | TBD2 | {{&SELF}} |
 | application/eat-bun+cbor | - | TBD3 | {{&SELF}} |
 | application/eat-bun+json | - | TBD4 | {{&SELF}} |
 | application/eat-ucs+cbor | - | TBD5 | {{&SELF}} |
@@ -532,7 +574,14 @@ Coding" is called "Encoding".  [^remove]
 
 [^remove-sec]: RFC editor: please remove this section
 
-## -01
+## -02 {#cl-02}
+
+* Update references
+* Register +cwt SSS
+* Move from eat-jwt to eat+jwt
+* Move from eat-cwt to eat+cwt
+
+## -01 {#cl-01}
 
 * Rename `profile` to `eat_profile` for consistency with EAT
   ([Issue#4](https://github.com/ietf-rats-wg/draft-eat-mt/issues/4))
