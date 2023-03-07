@@ -40,7 +40,7 @@ normative:
   CoAP: RFC7252
 
 informative:
-  RATS-Arch: I-D.ietf-rats-architecture
+  RATS-Arch: RFC9334
   BUILD-W-HTTP: BCP56
   REST-IoT: I-D.irtf-t2trg-rest-iot
   RFC4151:
@@ -532,7 +532,11 @@ Coding" is called "Encoding".  [^remove]
 
 [^remove-sec]: RFC editor: please remove this section
 
-## -01
+## -02 {#cl-02}
+
+* Update references
+
+## -01 {#cl-01}
 
 * Rename `profile` to `eat_profile` for consistency with EAT
   ([Issue#4](https://github.com/ietf-rats-wg/draft-eat-mt/issues/4))
