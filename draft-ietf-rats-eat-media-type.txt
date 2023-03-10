@@ -1,0 +1,623 @@
+
+
+
+
+Remote ATtestation ProcedureS                               L. Lundblade
+Internet-Draft                                       Security Theory LLC
+Intended status: Standards Track                             H. Birkholz
+Expires: 11 September 2023                                Fraunhofer SIT
+                                                              T. Fossati
+                                                                     arm
+                                                           10 March 2023
+
+
+                            EAT Media Types
+                 draft-ietf-rats-eat-media-type-latest
+
+Abstract
+
+   Payloads used in Remote Attestation Procedures may require an
+   associated media type for their conveyance, for example when used in
+   RESTful APIs.
+
+   This memo defines media types to be used for Entity Attestation
+   Tokens (EAT).
+
+Discussion Venues
+
+   This note is to be removed before publishing as an RFC.
+
+   Discussion of this document takes place on the Remote ATtestation
+   ProcedureS Working Group mailing list (rats@ietf.org), which is
+   archived at https://mailarchive.ietf.org/arch/browse/rats/.
+
+   Source for this draft and an issue tracker can be found at
+   https://github.com/thomas-fossati/draft-eat-mt.
+
+Status of This Memo
+
+   This Internet-Draft is submitted in full conformance with the
+   provisions of BCP 78 and BCP 79.
+
+   Internet-Drafts are working documents of the Internet Engineering
+   Task Force (IETF).  Note that other groups may also distribute
+   working documents as Internet-Drafts.  The list of current Internet-
+   Drafts is at https://datatracker.ietf.org/drafts/current/.
+
+   Internet-Drafts are draft documents valid for a maximum of six months
+   and may be updated, replaced, or obsoleted by other documents at any
+   time.  It is inappropriate to use Internet-Drafts as reference
+   material or to cite them other than as "work in progress."
+
+   This Internet-Draft will expire on 11 September 2023.
+
+Copyright Notice
+
+   Copyright (c) 2023 IETF Trust and the persons identified as the
+   document authors.  All rights reserved.
+
+   This document is subject to BCP 78 and the IETF Trust's Legal
+   Provisions Relating to IETF Documents (https://trustee.ietf.org/
+   license-info) in effect on the date of publication of this document.
+   Please review these documents carefully, as they describe your rights
+   and restrictions with respect to this document.  Code Components
+   extracted from this document must include Revised BSD License text as
+   described in Section 4.e of the Trust Legal Provisions and are
+   provided without warranty as described in the Revised BSD License.
+
+Table of Contents
+
+   1.  Introduction
+     1.1.  Requirements Language
+   2.  EAT Types
+   3.  A Media Type Parameter for EAT Profiles
+   4.  Examples
+   5.  Security Considerations
+   6.  IANA Considerations
+     6.1.  +cwt Structured Syntax Suffix
+       6.1.1.  Registry Contents
+     6.2.  Media Types
+     6.3.  application/eat+cwt Registration
+     6.4.  application/eat+jwt Registration
+     6.5.  application/eat-bun+cbor Registration
+     6.6.  application/eat-bun+json Registration
+     6.7.  application/eat-ucs+cbor Registration
+     6.8.  application/eat-ucs+json Registration
+     6.9.  Content-Format
+   7.  Changelog
+     7.1.   -02
+     7.2.   -01
+   8.  References
+     8.1.  Normative References
+     8.2.  Informative References
+   Acknowledgments
+   Authors' Addresses
+
+1.  Introduction
+
+   Payloads used in Remote Attestation Procedures [RATS-Arch] may
+   require an associated media type for their conveyance, for example
+   when used in RESTful APIs (Figure 1).
+
+    .----.                    .----------.                .----------.
+    | RP |                    | Attester |                | Verifier |
+    '-+--'                    '----+-----'                '-----+----'
+      |                            | POST /verify               |
+      |                            | EAT(Evidence)              |
+      |                            +--------------------------->|
+      |                            |                     200 OK |
+      |                            |   EAT(Attestation Results) |
+      |                            |<---------------------------+
+      |                 POST /auth |                            |
+      |   EAT(Attestation Results) |                            |
+      |<---------------------------+                            |
+      | 201 Created                |                            |
+      +--------------------------->|                            |
+      |                            |                            |
+      |                            |                            |
+
+    Figure 1: Conveying RATS conceptual messages in REST APIs using EAT
+
+   This memo defines media types to be used for Entity Attestation Token
+   (EAT) [EAT] payloads independently of the RATS Conceptual Message in
+   which they manifest themselves.  The objective is to give protocol,
+   API and application designers a number of readily available and
+   reusable media types for integrating EAT-based messages in their
+   flows, for example when using HTTP [BUILD-W-HTTP] or CoAP [REST-IoT].
+
+1.1.  Requirements Language
+
+   This document uses the terms and concepts defined in [RATS-Arch].
+
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
+   "OPTIONAL" in this document are to be interpreted as described in
+   BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
+   capitals, as shown here.
+
+2.  EAT Types
+
+   Figure 2 illustrates the six EAT wire formats and how they relate to
+   each other.  [EAT] defines four of them (CWT, JWT and Detached EAT
+   Bundle in its JSON and CBOR flavours), whilst [UCCS] defines the
+   remaining two: UCCS and UJCS.
+
+                    .-----.
+              .----+ UJCS |<-------------------------.
+             |     '-----'                            |
+             |                                        |
+             |      .-----.                           |
+             +-----+ UCCS |<-----------------------.  |
+             |     '-----'                          | |
+             |                                      | |
+             |      .------.                        | |
+             +-----+  JWT  |<------.                | |
+             |     '------'      .--+---.           | |
+             |                  | Crypto |<------.  | |
+             |      .------.     '--+---'         | | |
+             +-----+  CWT  |<------'              | | |
+             |     '------'                   .---+-+-+----.
+             |                                | Claims-Set +--.
+             |      .------.                  '---+---+----'   |
+             +-----+ BUN-J |<------.              | ^ |        v
+             |     '------'      .--+---.         | | |     .------.
+             |                  | Bundle |<------'  | |    | Digest |
+             |      .------.     '--+---'           | v     '--+---'
+             +-----+ BUN-C |<------'  ^         .---+----.     |
+             |     '------'           |         | submod |<---'
+             |                        |         '--------'
+             v                        |             ^
+     .--------------.                 |             |
+     | Nested-Token +-----------------+------------'
+     '--------------'
+
+                     .-------.     .---------.   .------.
+          Legenda:  | Process |   | Wire Fmt |   | CDDL |
+                     '-------'    '---------'    '------'
+
+                            Figure 2: EAT Types
+
+3.  A Media Type Parameter for EAT Profiles
+
+   EAT is an open and flexible format.  To improve interoperability,
+   Section 6 of [EAT] defines the concept of EAT profiles.  Profiles are
+   used to constrain the parameters that producers and consumers of a
+   specific EAT profile need to understand in order to interoperate.
+   For example: the number and type of claims, which serialisation
+   format, the supported signature schemes, etc.  EATs carry an in-band
+   profile identifier using the eat_profile claim (see Section 4.3.2 of
+   [EAT]).  The value of the eat_profile claim is either an OID or a
+   URI.
+
+   The media types defined in this document include an optional
+   eat_profile parameter that can be used to mirror the homonymous claim
+   of the transported EAT.  Exposing the EAT profile at the API layer
+   allows API routers to dispatch payloads directly to the profile-
+   specific processor without having to snoop into the request bodies.
+   This design also provides a finer-grained and scalable type system
+   that matches the inherent extensibility of EAT.  The expectation
+   being that a certain EAT profile automatically obtains a media type
+   derived from the base (e.g., application/eat+cwt) by populating the
+   eat_profile parameter with the corresponding OID or URL.
+
+4.  Examples
+
+   The example in Figure 3 illustrates the usage of EAT media types for
+   transporting attestation evidence as well as negotiating the
+   acceptable format of the attestation result.
+
+   # NOTE: '\' line wrapping per RFC 8792
+
+   POST /challenge-response/v1/session/1234567890 HTTP/1.1
+   Host: verifier.example
+   Accept: application/eat+cwt; eat_profile="tag:ar4si.example,2021"
+   Content-Type: application/eat+cwt; \
+                 eat_profile="tag:evidence.example,2022"
+
+   [ CBOR-encoded EAT w/ eat_profile="tag:evidence.example,2022" ]
+
+             Figure 3: Example REST Verification API (request)
+
+   The example in Figure 4 illustrates the usage of EAT media types for
+   transporting attestation results.
+
+   # NOTE: '\' line wrapping per RFC 8792
+
+   HTTP/1.1 200 OK
+   Content-Type: application/eat+cwt; \
+                 eat_profile="tag:ar4si.example,2021"
+
+   [ CBOR-encoded EAT w/ eat_profile="tag:ar4si.example,2021" ]
+
+             Figure 4: Example REST Verification API (response)
+
+   In both cases, a tag URI [RFC4151] identifying the profile is carried
+   as an explicit parameter.
+
+5.  Security Considerations
+
+   The security consideration of [EAT] and [UCCS] apply in full.
+
+6.  IANA Considerations
+
+
+   // RFC Editor: please replace RFCthis with this RFC number and remove
+   // this note.
+
+6.1.  +cwt Structured Syntax Suffix
+
+   IANA is requested to register the +cwt structured syntax suffix in
+   the "Structured Syntax Suffixes" registry
+   [IANA.media-type-structured-suffix] in the manner described in
+   [MediaTypes], which can be used to indicate that the media type is
+   encoded as a CWT.
+
+6.1.1.  Registry Contents
+
+   Name:  CBOR Web Token (CWT)
+   +suffix:  +cwt
+   References:  [CWT]
+   Encoding Considerations:  binary
+   Interoperability Considerations:  N/A
+   Fragment Identifier Considerations:  The syntax and semantics of
+      fragment identifiers specified for +cwt SHOULD be as specified for
+      application/cwt.  (At publication of this document, there is no
+      fragment identification syntax defined for application/cwt.)
+   Security Considerations:  See Section 8 of [CWT]
+   Contact:  RATS WG mailing list (rats@ietf.org), or IETF Security Area
+      (saag@ietf.org)
+   Author/Change Controller:  Remote ATtestation ProcedureS (RATS)
+      Working Group.  The IESG has change control over this
+      registration.
+
+6.2.  Media Types
+
+   IANA is requested to add the following media types to the "Media
+   Types" registry [IANA.media-types].
+
+   +==============+=====================+======================+
+   | Name         | Template            | Reference            |
+   +==============+=====================+======================+
+   | EAT CWT      | application/eat+cwt | RFCthis, Section 6.3 |
+   +--------------+---------------------+----------------------+
+   | EAT JWT      | application/eat+jwt | RFCthis, Section 6.4 |
+   +--------------+---------------------+----------------------+
+   | Detached EAT | application/eat-    | RFCthis, Section 6.5 |
+   | Bundle CBOR  | bun+cbor            |                      |
+   +--------------+---------------------+----------------------+
+   | Detached EAT | application/eat-    | RFCthis, Section 6.6 |
+   | Bundle JSON  | bun+json            |                      |
+   +--------------+---------------------+----------------------+
+   | EAT UCCS     | application/eat-    | RFCthis, Section 6.7 |
+   |              | ucs+cbor            |                      |
+   +--------------+---------------------+----------------------+
+   | EAT UJCS     | application/eat-    | RFCthis, Section 6.8 |
+   |              | ucs+json            |                      |
+   +--------------+---------------------+----------------------+
+
+                      Table 1: New Media Types
+
+6.3.  application/eat+cwt Registration
+
+   Type name:  application
+   Subtype name:  eat+cwt
+   Required parameters:  n/a
+   Optional parameters:  "eat_profile" (EAT profile in string format.
+      OIDs MUST use the dotted-decimal notation.  The parameter value is
+      case-insensitive.)
+   Encoding considerations:  binary
+   Security considerations:  Section 5 of RFCthis
+   Interoperability considerations:  n/a
+   Published specification:  Section 6.2 of RFCthis
+   Applications that use this media type:  Attesters, Verifiers,
+      Endorsers and Reference-Value providers, Relying Parties that need
+      to transfer EAT payloads over HTTP(S), CoAP(S), and other
+      transports.
+   Fragment identifier considerations:  n/a
+   Person & email address to contact for further information:  RATS WG
+      mailing list (rats@ietf.org)
+   Intended usage:  COMMON
+   Restrictions on usage:  none
+   Author/Change controller:  IETF
+   Provisional registration:
+      // maybe
+
+6.4.  application/eat+jwt Registration
+
+   Type name:  application
+   Subtype name:  eat+jwt
+   Required parameters:  n/a
+   Optional parameters:  "eat_profile" (EAT profile in string format.
+      OIDs MUST use the dotted-decimal notation.  The parameter value is
+      case-insensitive.)
+   Encoding considerations:  8bit
+   Security considerations:  Section 5 of RFCthis
+   Interoperability considerations:  n/a
+   Published specification:  Section 6.2 of RFCthis
+   Applications that use this media type  Attesters, Verifiers,
+      Endorsers and Reference-Value providers, Relying Parties that need
+      to transfer EAT payloads over HTTP(S), CoAP(S), and other
+      transports.
+   Fragment identifier considerations:  n/a
+   Person & email address to contact for further information:  RATS WG
+      mailing list (rats@ietf.org)
+   Intended usage:  COMMON
+   Restrictions on usage:  none
+   Author/Change controller:  IETF
+   Provisional registration:
+      // maybe
+
+6.5.  application/eat-bun+cbor Registration
+
+   Type name:  application
+   Subtype name:  eat-bun+cbor
+   Required parameters:  n/a
+   Optional parameters:  "eat_profile" (EAT profile in string format.
+      OIDs MUST use the dotted-decimal notation.  The parameter value is
+      case-insensitive.)
+   Encoding considerations:  binary
+   Security considerations:  Section 5 of RFCthis
+   Interoperability considerations:  n/a
+   Published specification:  Section 6.2 of RFCthis
+   Applications that use this media type:  Attesters, Verifiers,
+      Endorsers and Reference-Value providers, Relying Parties that need
+      to transfer EAT payloads over HTTP(S), CoAP(S), and other
+      transports.
+   Fragment identifier considerations:  n/a
+   Person & email address to contact for further information:  RATS WG
+      mailing list (rats@ietf.org)
+   Intended usage:  COMMON
+   Restrictions on usage:  none
+   Author/Change controller:  IETF
+   Provisional registration:
+      // maybe
+
+6.6.  application/eat-bun+json Registration
+
+   Type name:  application
+   Subtype name:  eat-bun+json
+   Required parameters:  n/a
+   Optional parameters:  "eat_profile" (EAT profile in string format.
+      OIDs MUST use the dotted-decimal notation.  The parameter value is
+      case-insensitive.)
+   Encoding considerations:  Same as [RFC7159]
+   Security considerations:  Section 5 of RFCthis
+   Interoperability considerations:  n/a
+   Published specification:  Section 6.2 of RFCthis
+   Applications that use this media type  Attesters, Verifiers,
+      Endorsers and Reference-Value providers, Relying Parties that need
+      to transfer EAT payloads over HTTP(S), CoAP(S), and other
+      transports.
+   Fragment identifier considerations:  n/a
+   Person & email address to contact for further information:  RATS WG
+      mailing list (rats@ietf.org)
+   Intended usage:  COMMON
+   Restrictions on usage:  none
+   Author/Change controller:  IETF
+   Provisional registration:
+      // maybe
+
+6.7.  application/eat-ucs+cbor Registration
+
+   Type name:  application
+   Subtype name:  eat-ucs+cbor
+   Required parameters:  n/a
+   Optional parameters:  "eat_profile" (EAT profile in string format.
+      OIDs MUST use the dotted-decimal notation.  The parameter value is
+      case-insensitive.)
+   Encoding considerations:  binary
+   Security considerations:  Section 5 of RFCthis
+   Interoperability considerations:  n/a
+   Published specification:  Section 6.2 of RFCthis
+   Applications that use this media type:  Attesters, Verifiers,
+      Endorsers and Reference-Value providers, Relying Parties that need
+      to transfer EAT payloads over HTTP(S), CoAP(S), and other
+      transports.
+   Fragment identifier considerations:  n/a
+   Person & email address to contact for further information:  RATS WG
+      mailing list (rats@ietf.org)
+   Intended usage:  COMMON
+   Restrictions on usage:  none
+   Author/Change controller:  IETF
+   Provisional registration:
+      // maybe
+
+6.8.  application/eat-ucs+json Registration
+
+   Type name:  application
+   Subtype name:  eat-ucs+json
+   Required parameters:  n/a
+   Optional parameters:  "eat_profile" (EAT profile in string format.
+      OIDs MUST use the dotted-decimal notation.  The parameter value is
+      case-insensitive.)
+   Encoding considerations:  Same as [RFC7159]
+   Security considerations:  Section 5 of RFCthis
+   Interoperability considerations:  n/a
+   Published specification:  Section 6.2 of RFCthis
+   Applications that use this media type  Attesters, Verifiers,
+      Endorsers and Reference-Value providers, Relying Parties that need
+      to transfer EAT payloads over HTTP(S), CoAP(S), and other
+      transports.
+   Fragment identifier considerations:  n/a
+   Person & email address to contact for further information:  RATS WG
+      mailing list (rats@ietf.org)
+   Intended usage:  COMMON
+   Restrictions on usage:  none
+   Author/Change controller:  IETF
+   Provisional registration:
+      // maybe
+
+6.9.  Content-Format
+
+      |  *Issue*: for symmetry reasons we may need a way to pass the
+      |  profile information when using content formats too.  Early
+      |  proposal for a new CoAP option:
+      |  [I-D.fossati-core-parametrized-cf]
+
+   IANA is requested to register a Content-Format number in the "CoAP
+   Content-Formats" sub-registry, within the "Constrained RESTful
+   Environments (CoRE) Parameters" Registry [IANA.core-parameters], as
+   follows:
+
+   +==========================+================+======+===========+
+   | Content-Type             | Content Coding | ID   | Reference |
+   +==========================+================+======+===========+
+   | application/eat+cwt      | -              | TBD1 | RFCthis   |
+   +--------------------------+----------------+------+-----------+
+   | application/eat+jwt      | -              | TBD2 | RFCthis   |
+   +--------------------------+----------------+------+-----------+
+   | application/eat-bun+cbor | -              | TBD3 | RFCthis   |
+   +--------------------------+----------------+------+-----------+
+   | application/eat-bun+json | -              | TBD4 | RFCthis   |
+   +--------------------------+----------------+------+-----------+
+   | application/eat-ucs+cbor | -              | TBD5 | RFCthis   |
+   +--------------------------+----------------+------+-----------+
+   | application/eat-ucs+json | -              | TBD6 | RFCthis   |
+   +--------------------------+----------------+------+-----------+
+
+                     Table 2: New Content-Formats
+
+   TBD1..6 are to be assigned from the space 256..999.
+
+   In the registry as defined by Section 12.3 of [CoAP] at the time of
+   writing, the column "Content-Type" is called "Media type" and the
+   column "Content Coding" is called "Encoding".
+   // RFC editor: please remove this paragraph.
+
+7.  Changelog
+
+
+   // RFC editor: please remove this section
+
+7.1.   -02
+
+   *  Update references
+
+   *  Register +cwt SSS
+
+   *  Move from eat-jwt to eat+jwt
+
+   *  Move from eat-cwt to eat+cwt
+
+7.2.   -01
+
+   *  Rename profile to eat_profile for consistency with EAT (Issue#4
+      (https://github.com/ietf-rats-wg/draft-eat-mt/issues/4))
+
+   *  The DEB acronym is gone: shorthand is now "bun" from bundle
+      (Issue#8 (https://github.com/ietf-rats-wg/draft-eat-mt/issues/8))
+
+   *  Incorporate editorial suggestions from Carl and Dave (Issue#7
+      (https://github.com/ietf-rats-wg/draft-eat-mt/issues/7), Issue#9
+      (https://github.com/ietf-rats-wg/draft-eat-mt/issues/9))
+
+8.  References
+
+8.1.  Normative References
+
+   [CoAP]     Shelby, Z., Hartke, K., and C. Bormann, "The Constrained
+              Application Protocol (CoAP)", RFC 7252,
+              DOI 10.17487/RFC7252, June 2014,
+              <https://www.rfc-editor.org/rfc/rfc7252>.
+
+   [CWT]      Jones, M., Wahlstroem, E., Erdtman, S., and H. Tschofenig,
+              "CBOR Web Token (CWT)", RFC 8392, DOI 10.17487/RFC8392,
+              May 2018, <https://www.rfc-editor.org/rfc/rfc8392>.
+
+   [EAT]      Lundblade, L., Mandyam, G., O'Donoghue, J., and C.
+              Wallace, "The Entity Attestation Token (EAT)", Work in
+              Progress, Internet-Draft, draft-ietf-rats-eat-19, 19
+              December 2022, <https://datatracker.ietf.org/doc/html/
+              draft-ietf-rats-eat-19>.
+
+   [IANA.core-parameters]
+              IANA, "Constrained RESTful Environments (CoRE)
+              Parameters",
+              <https://www.iana.org/assignments/core-parameters>.
+
+   [IANA.media-type-structured-suffix]
+              IANA, "Structured Syntax Suffixes",
+              <https://www.iana.org/assignments/media-type-structured-
+              suffix>.
+
+   [IANA.media-types]
+              IANA, "Media Types",
+              <https://www.iana.org/assignments/media-types>.
+
+   [MediaTypes]
+              Freed, N., Klensin, J., and T. Hansen, "Media Type
+              Specifications and Registration Procedures", BCP 13,
+              RFC 6838, DOI 10.17487/RFC6838, January 2013,
+              <https://www.rfc-editor.org/rfc/rfc6838>.
+
+   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
+              Requirement Levels", BCP 14, RFC 2119,
+              DOI 10.17487/RFC2119, March 1997,
+              <https://www.rfc-editor.org/rfc/rfc2119>.
+
+   [RFC7159]  Bray, T., Ed., "The JavaScript Object Notation (JSON) Data
+              Interchange Format", RFC 7159, DOI 10.17487/RFC7159, March
+              2014, <https://www.rfc-editor.org/rfc/rfc7159>.
+
+   [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
+              2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
+              May 2017, <https://www.rfc-editor.org/rfc/rfc8174>.
+
+   [UCCS]     Birkholz, H., O'Donoghue, J., Cam-Winget, N., and C.
+              Bormann, "A CBOR Tag for Unprotected CWT Claims Sets",
+              Work in Progress, Internet-Draft, draft-ietf-rats-uccs-05,
+              1 February 2023, <https://datatracker.ietf.org/doc/html/
+              draft-ietf-rats-uccs-05>.
+
+8.2.  Informative References
+
+   [BUILD-W-HTTP]
+              Nottingham, M., "Building Protocols with HTTP", BCP 56,
+              RFC 9205, June 2022.
+
+   [I-D.fossati-core-parametrized-cf]
+              Fossati, T. and H. Birkholz, "Parametrized Content-Format
+              for CoAP", Work in Progress, Internet-Draft, draft-
+              fossati-core-parametrized-cf-01, 17 October 2022,
+              <https://datatracker.ietf.org/doc/html/draft-fossati-core-
+              parametrized-cf-01>.
+
+   [RATS-Arch]
+              Birkholz, H., Thaler, D., Richardson, M., Smith, N., and
+              W. Pan, "Remote ATtestation procedureS (RATS)
+              Architecture", RFC 9334, DOI 10.17487/RFC9334, January
+              2023, <https://www.rfc-editor.org/rfc/rfc9334>.
+
+   [REST-IoT] Keränen, A., Kovatsch, M., and K. Hartke, "Guidance on
+              RESTful Design for Internet of Things Systems", Work in
+              Progress, Internet-Draft, draft-irtf-t2trg-rest-iot-11, 11
+              January 2023, <https://datatracker.ietf.org/doc/html/
+              draft-irtf-t2trg-rest-iot-11>.
+
+   [RFC4151]  Kindberg, T. and S. Hawke, "The 'tag' URI Scheme",
+              RFC 4151, DOI 10.17487/RFC4151, October 2005,
+              <https://www.rfc-editor.org/rfc/rfc4151>.
+
+Acknowledgments
+
+   Thank you Carl Wallace, Dave Thaler, Michael Richardson for your
+   comments and suggestions.
+
+Authors' Addresses
+
+   Laurence Lundblade
+   Security Theory LLC
+   Email: lgl@securitytheory.com
+
+
+   Henk Birkholz
+   Fraunhofer Institute for Secure Information Technology
+   Rheinstrasse 75
+   64295 Darmstadt
+   Germany
+   Email: henk.birkholz@sit.fraunhofer.de
+
+
+   Thomas Fossati
+   arm
+   Email: thomas.fossati@arm.com
