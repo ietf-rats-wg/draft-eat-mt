@@ -578,8 +578,11 @@ Coding" is called "Encoding".  [^remove]
 
 * Update references
 * Register +cwt SSS
+  ([Issue#14](https://github.com/ietf-rats-wg/draft-eat-mt/issues/14))
 * Move from eat-jwt to eat+jwt
+  ([Issue#14](https://github.com/ietf-rats-wg/draft-eat-mt/issues/14))
 * Move from eat-cwt to eat+cwt
+  ([Issue#14](https://github.com/ietf-rats-wg/draft-eat-mt/issues/14))
 
 ## -01 {#cl-01}
 
