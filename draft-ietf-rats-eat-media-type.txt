@@ -5,10 +5,10 @@
 Remote ATtestation ProcedureS                               L. Lundblade
 Internet-Draft                                       Security Theory LLC
 Intended status: Standards Track                             H. Birkholz
-Expires: 11 September 2023                                Fraunhofer SIT
+Expires: 5 January 2024                                   Fraunhofer SIT
                                                               T. Fossati
                                                                      arm
-                                                           10 March 2023
+                                                             4 July 2023
 
 
                             EAT Media Types
@@ -49,7 +49,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 11 September 2023.
+   This Internet-Draft will expire on 5 January 2024.
 
 Copyright Notice
 
@@ -493,11 +493,14 @@ Table of Contents
 
    *  Update references
 
-   *  Register +cwt SSS
+   *  Register +cwt SSS (Issue#14 (https://github.com/ietf-rats-wg/
+      draft-eat-mt/issues/14))
 
-   *  Move from eat-jwt to eat+jwt
+   *  Move from eat-jwt to eat+jwt (Issue#14 (https://github.com/ietf-
+      rats-wg/draft-eat-mt/issues/14))
 
-   *  Move from eat-cwt to eat+cwt
+   *  Move from eat-cwt to eat+cwt (Issue#14 (https://github.com/ietf-
+      rats-wg/draft-eat-mt/issues/14))
 
 7.2.   -01
 
@@ -526,9 +529,9 @@ Table of Contents
 
    [EAT]      Lundblade, L., Mandyam, G., O'Donoghue, J., and C.
               Wallace, "The Entity Attestation Token (EAT)", Work in
-              Progress, Internet-Draft, draft-ietf-rats-eat-19, 19
-              December 2022, <https://datatracker.ietf.org/doc/html/
-              draft-ietf-rats-eat-19>.
+              Progress, Internet-Draft, draft-ietf-rats-eat-21, 30 June
+              2023, <https://datatracker.ietf.org/doc/html/draft-ietf-
+              rats-eat-21>.
 
    [IANA.core-parameters]
               IANA, "Constrained RESTful Environments (CoRE)

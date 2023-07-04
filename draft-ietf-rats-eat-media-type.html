@@ -13,24 +13,22 @@
 type for their conveyance, for example when used in RESTful APIs. 
        This memo defines media types to be used for Entity Attestation Tokens (EAT). 
     " name="description">
-<meta content="xml2rfc 3.16.0" name="generator">
+<meta content="xml2rfc 3.17.4" name="generator">
 <meta content="EAT, media type" name="keyword">
 <meta content="draft-ietf-rats-eat-media-type-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.16.0
-    Python 3.10.9
-    appdirs 1.4.4
-    ConfigArgParse 1.5.3
-    google-i18n-address 2.5.2
-    html5lib 1.1
+  xml2rfc 3.17.4
+    Python 3.10.11
+    ConfigArgParse 1.5.5
+    google-i18n-address 3.1.0
     intervaltree 3.1.0
     Jinja2 3.1.2
     lxml 4.9.2
-    MarkupSafe 2.1.2
+    platformdirs 3.8.0
     pycountry 22.3.5
     PyYAML 6.0
-    requests 2.28.2
-    setuptools 67.5.1
+    requests 2.31.0
+    setuptools 68.0.0
     six 1.16.0
     wcwidth 0.2.6
 -->
@@ -614,6 +612,7 @@ sub, sup {
   clear: left;
   float: left;
   text-align: right;
+  margin-right: 1ch;
 }
 #identifiers dd {
   margin: 0;
@@ -665,7 +664,8 @@ sub, sup {
 .references dt {
   text-align: right;
   font-weight: bold;
-  min-width: 7em;
+  min-width: 10ch;
+  margin-right: 1.5ch;
 }
 .references dt:target::before {
   content: "⇒";
@@ -673,7 +673,7 @@ sub, sup {
   margin: 0 10px 0 -25px;
 }
 .references dd {
-  margin-left: 8em !important;
+  margin-left: 12ch !important;
   overflow: auto;
 }
 
@@ -1051,11 +1051,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">EAT Media Types</td>
-<td class="right">March 2023</td>
+<td class="right">July 2023</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Lundblade, et al.</td>
-<td class="center">Expires 11 September 2023</td>
+<td class="center">Expires 5 January 2024</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1068,12 +1068,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-ietf-rats-eat-media-type-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2023-03-10" class="published">10 March 2023</time>
+<time datetime="2023-07-04" class="published">4 July 2023</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2023-09-11">11 September 2023</time></dd>
+<dd class="expires"><time datetime="2024-01-05">5 January 2024</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1128,7 +1128,7 @@ type for their conveyance, for example when used in RESTful APIs.<a href="#secti
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 11 September 2023.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 5 January 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1511,12 +1511,12 @@ and UJCS.<a href="#section-2-1" class="pilcrow">¶</a></p>
       <h2 id="name-a-media-type-parameter-for-">
 <a href="#section-3" class="section-number selfRef">3. </a><a href="#name-a-media-type-parameter-for-" class="section-name selfRef">A Media Type Parameter for EAT Profiles</a>
       </h2>
-<p id="section-3-1">EAT is an open and flexible format.  To improve interoperability, <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-rats-eat-19#section-6" class="relref">Section 6</a> of [<a href="#EAT" class="cite xref">EAT</a>]</span> defines the concept of EAT profiles.  Profiles are used to constrain
+<p id="section-3-1">EAT is an open and flexible format.  To improve interoperability, <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-rats-eat-21#section-6" class="relref">Section 6</a> of [<a href="#EAT" class="cite xref">EAT</a>]</span> defines the concept of EAT profiles.  Profiles are used to constrain
 the parameters that producers and consumers of a specific EAT profile need to
 understand in order to interoperate.  For example: the number and type of
 claims, which serialisation format, the supported signature schemes, etc.  EATs
 carry an in-band profile identifier using the <code>eat_profile</code> claim (see
-<span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-rats-eat-19#section-4.3.2" class="relref">Section 4.3.2</a> of [<a href="#EAT" class="cite xref">EAT</a>]</span>).  The value of the <code>eat_profile</code> claim is either an
+<span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-rats-eat-21#section-4.3.2" class="relref">Section 4.3.2</a> of [<a href="#EAT" class="cite xref">EAT</a>]</span>).  The value of the <code>eat_profile</code> claim is either an
 OID or a URI.<a href="#section-3-1" class="pilcrow">¶</a></p>
 <p id="section-3-2">The media types defined in this document include an optional <code>eat_profile</code>
 parameter that can be used to mirror the homonymous claim of the transported
@@ -2333,11 +2333,14 @@ Coding" is called "Encoding".  <span class="cref" id="remove">RFC editor: please
 <ul class="normal">
 <li class="normal" id="section-7.1-1.1">Update references<a href="#section-7.1-1.1" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-7.1-1.2">Register +cwt SSS<a href="#section-7.1-1.2" class="pilcrow">¶</a>
+          <li class="normal" id="section-7.1-1.2">Register +cwt SSS
+(<a href="https://github.com/ietf-rats-wg/draft-eat-mt/issues/14">Issue#14</a>)<a href="#section-7.1-1.2" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-7.1-1.3">Move from eat-jwt to eat+jwt<a href="#section-7.1-1.3" class="pilcrow">¶</a>
+          <li class="normal" id="section-7.1-1.3">Move from eat-jwt to eat+jwt
+(<a href="https://github.com/ietf-rats-wg/draft-eat-mt/issues/14">Issue#14</a>)<a href="#section-7.1-1.3" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-7.1-1.4">Move from eat-cwt to eat+cwt<a href="#section-7.1-1.4" class="pilcrow">¶</a>
+          <li class="normal" id="section-7.1-1.4">Move from eat-cwt to eat+cwt
+(<a href="https://github.com/ietf-rats-wg/draft-eat-mt/issues/14">Issue#14</a>)<a href="#section-7.1-1.4" class="pilcrow">¶</a>
 </li>
         </ul>
 </section>
@@ -2382,7 +2385,7 @@ Coding" is called "Encoding".  <span class="cref" id="remove">RFC editor: please
 <dd class="break"></dd>
 <dt id="EAT">[EAT]</dt>
         <dd>
-<span class="refAuthor">Lundblade, L.</span>, <span class="refAuthor">Mandyam, G.</span>, <span class="refAuthor">O'Donoghue, J.</span>, and <span class="refAuthor">C. Wallace</span>, <span class="refTitle">"The Entity Attestation Token (EAT)"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-rats-eat-19</span>, <time datetime="2022-12-19" class="refDate">19 December 2022</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-rats-eat-19">https://datatracker.ietf.org/doc/html/draft-ietf-rats-eat-19</a>&gt;</span>. </dd>
+<span class="refAuthor">Lundblade, L.</span>, <span class="refAuthor">Mandyam, G.</span>, <span class="refAuthor">O'Donoghue, J.</span>, and <span class="refAuthor">C. Wallace</span>, <span class="refTitle">"The Entity Attestation Token (EAT)"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-rats-eat-21</span>, <time datetime="2023-06-30" class="refDate">30 June 2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-rats-eat-21">https://datatracker.ietf.org/doc/html/draft-ietf-rats-eat-21</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="IANA.core-parameters">[IANA.core-parameters]</dt>
         <dd>
