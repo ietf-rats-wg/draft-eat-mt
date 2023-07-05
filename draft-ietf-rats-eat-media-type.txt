@@ -5,10 +5,10 @@
 Remote ATtestation ProcedureS                               L. Lundblade
 Internet-Draft                                       Security Theory LLC
 Intended status: Standards Track                             H. Birkholz
-Expires: 5 January 2024                                   Fraunhofer SIT
+Expires: 6 January 2024                                   Fraunhofer SIT
                                                               T. Fossati
                                                                      arm
-                                                             4 July 2023
+                                                             5 July 2023
 
 
                             EAT Media Types
@@ -49,7 +49,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 5 January 2024.
+   This Internet-Draft will expire on 6 January 2024.
 
 Copyright Notice
 
@@ -85,8 +85,9 @@ Table of Contents
      6.8.  application/eat-ucs+json Registration
      6.9.  Content-Format
    7.  Changelog
-     7.1.   -02
-     7.2.   -01
+     7.1.   -03
+     7.2.   -02
+     7.3.   -01
    8.  References
      8.1.  Normative References
      8.2.  Informative References
@@ -489,7 +490,11 @@ Table of Contents
 
    // RFC editor: please remove this section
 
-7.1.   -02
+7.1.   -03
+
+   *  Update references
+
+7.2.   -02
 
    *  Update references
 
@@ -502,7 +507,7 @@ Table of Contents
    *  Move from eat-cwt to eat+cwt (Issue#14 (https://github.com/ietf-
       rats-wg/draft-eat-mt/issues/14))
 
-7.2.   -01
+7.3.   -01
 
    *  Rename profile to eat_profile for consistency with EAT (Issue#4
       (https://github.com/ietf-rats-wg/draft-eat-mt/issues/4))
