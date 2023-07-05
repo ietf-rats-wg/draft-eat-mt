@@ -574,6 +574,10 @@ Coding" is called "Encoding".  [^remove]
 
 [^remove-sec]: RFC editor: please remove this section
 
+## -03 {#cl-03}
+
+* Update references
+
 ## -02 {#cl-02}
 
 * Update references
