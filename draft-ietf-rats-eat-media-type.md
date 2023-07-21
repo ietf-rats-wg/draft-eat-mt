@@ -217,7 +217,7 @@ Contact:
 
 Author/Change Controller:
 : Remote ATtestation ProcedureS (RATS) Working Group.
-  The IESG has change control over this registration.
+  The IETF has change control over this registration.
 
 ## Media Types {#media-type}
 
