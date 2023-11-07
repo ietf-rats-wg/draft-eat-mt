@@ -31,8 +31,8 @@ author:
    country: Germany
  - ins: T. Fossati
    name: Thomas Fossati
-   organization: arm
-   email: thomas.fossati@arm.com
+   organization: Linaro
+   email: thomas.fossati@linaro.org
 
 normative:
   EAT: I-D.ietf-rats-eat
