@@ -171,7 +171,11 @@ explicit parameter.
 
 # Security Considerations {#seccons}
 
-The security consideration of {{EAT}} and {{UCCS}} apply in full.
+The security consideration sections of {{EAT}} and {{UCCS}} apply in full.
+
+## Use of alternate media types
+
+It may be desirable to use existing media types (cbor, json, jose, cose) in place of the ones defined in this document for security purposes.  For instance, content filtering middleboxes may block or drop unknown media types, and if this is occuring this may not be detected by the endpoints of an attestation protocol.  In addition, a man-in-the-middle attacker who can identify attestation messaging via media type may seek to modify the attestation payload (which could be possible without detection at the receiver for unsigned attestations such as UCCS).  Therefore an implementer of an attestation protocol may choose to use one of the existing media types as an alternative to an attestation media type depending on the security of the underlying transport layer.  If that is the case, the attestation protocol should still be designed in such a way that the receiver can identify attestation messages without relying on the media type.
 
 # IANA Considerations
 
