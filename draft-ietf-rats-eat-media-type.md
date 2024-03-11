@@ -541,11 +541,6 @@ Provisional registration:
 
 ## Content-Format
 
-{:aside}
-> **Issue**: for symmetry reasons we may need a way to pass the profile
-> information when using content formats too. Early proposal for a new CoAP
-> option: {{?I-D.fossati-core-parametrized-cf}}
-
 IANA is requested to register a Content-Format number in the
 "CoAP Content-Formats" sub-registry, within
 the "Constrained RESTful Environments (CoRE) Parameters"
@@ -561,12 +556,6 @@ Registry {{!IANA.core-parameters}}, as follows:
 {: align="left" title="New Content-Formats"}
 
 TBD1..6 are to be assigned from the space 256..999.
-
-In the registry as defined by {{Section 12.3 of CoAP}} at the time of writing,
-the column "Content-Type" is called "Media type" and the column "Content
-Coding" is called "Encoding".  [^remove]
-
-[^remove]: RFC editor: please remove this paragraph.
 
 # Changelog
 
