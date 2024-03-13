@@ -43,12 +43,13 @@ autoscale: true
 * Giri's [[Issue#17](https://github.com/ietf-rats-wg/draft-eat-mt/issues/17)] and [[PR#18]](https://github.com/ietf-rats-wg/draft-eat-mt/pull/18)
   * _"[d]iscussion of when it might be appropriate *not* to use the media types [...]"_
   * Please chime in
+ 
+* Kathleen's [shepherd review](https://mailarchive.ietf.org/arch/msg/rats/gYMgvbvHr_UKPDnfDXI8JBQjGzM/)
+  * Clean up stale contents
 
 ---
 
 # Next Steps
-
-* Find document shepherd (Ionuț Mihalcea volunteered)
 
 * Request early allocations
 
