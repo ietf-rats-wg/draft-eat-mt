@@ -36,6 +36,7 @@ author:
 
 normative:
   EAT: I-D.ietf-rats-eat
+  JWT: RFC7519
   CWT: RFC8392
   UCCS: I-D.ietf-rats-uccs
   CoAP: RFC7252
@@ -103,8 +104,9 @@ This document uses the terms and concepts defined in {{RATS-Arch}}.
 
 {{fig-eat-types}} illustrates the six EAT wire formats and how they relate to
 each other.  {{EAT}} defines four of them (CWT, JWT and Detached EAT Bundle in
-its JSON and CBOR flavours), whilst {{UCCS}} defines the remaining two: UCCS
-and UJCS.
+its JSON and CBOR flavours), whilst {{UCCS}} defines UCCS, and we use
+the abbreviation "UJCS" to refer to unprotected JWT Claims Sets as
+defined in {{Section 2 of JWT}}.
 
 ~~~ aasvg
 {::include misc/EAT-pieces.txt}
