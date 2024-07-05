@@ -284,7 +284,7 @@ Author/Change controller:
 : IETF
 
 Provisional registration:
-: <cref>maybe</cref>
+: no
 
 ## application/eat+jwt Registration {#media-type-eat-jwt}
 
@@ -335,7 +335,7 @@ Author/Change controller:
 : IETF
 
 Provisional registration:
-: <cref>maybe</cref>
+: no
 
 ## application/eat-bun+cbor Registration {#media-type-deb-cbor}
 
@@ -386,7 +386,7 @@ Author/Change controller:
 : IETF
 
 Provisional registration:
-: <cref>maybe</cref>
+: no
 
 ## application/eat-bun+json Registration {#media-type-deb-json}
 
@@ -437,7 +437,7 @@ Author/Change controller:
 : IETF
 
 Provisional registration:
-: <cref>maybe</cref>
+: no
 
 ## application/eat-ucs+cbor Registration {#media-type-ucs-cbor}
 
@@ -488,7 +488,7 @@ Author/Change controller:
 : IETF
 
 Provisional registration:
-: <cref>maybe</cref>
+: no
 
 ## application/eat-ucs+json Registration {#media-type-ucs-json}
 
@@ -539,7 +539,7 @@ Author/Change controller:
 : IETF
 
 Provisional registration:
-: <cref>maybe</cref>
+: no
 
 ## Content-Format
 
@@ -602,7 +602,8 @@ TBD1..6 are to be assigned from the space 256..999.
 
 Thank you
 Carl Wallace,
-Dave Thaler,
+Carsten Bormann,
+Dave Thaler, and
 Michael Richardson
 for your comments and suggestions.
 
