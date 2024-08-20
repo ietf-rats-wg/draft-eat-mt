@@ -603,7 +603,8 @@ TBD1..6 are to be assigned from the space 256..999.
 Thank you
 Carl Wallace,
 Carsten Bormann,
-Dave Thaler, and
+Dave Thaler,
+Kathleen Moriarty and
 Michael Richardson
 for your comments and suggestions.
 
