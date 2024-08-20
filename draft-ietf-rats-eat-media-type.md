@@ -541,12 +541,11 @@ Author/Change controller:
 Provisional registration:
 : no
 
-## Content-Format
+## CoAP Content-Format Registrations
 
-IANA is requested to register a Content-Format number in the
-"CoAP Content-Formats" sub-registry, within
-the "Constrained RESTful Environments (CoRE) Parameters"
-Registry {{!IANA.core-parameters}}, as follows:
+IANA is requested to register the following Content-Format numbers in the "CoAP
+Content-Formats" sub-registry, within the "Constrained RESTful Environments
+(CoRE) Parameters" Registry {{!IANA.core-parameters}}:
 
 | Content-Type | Content Coding | ID | Reference |
 | application/eat+cwt | - | TBD1 | {{&SELF}} |
