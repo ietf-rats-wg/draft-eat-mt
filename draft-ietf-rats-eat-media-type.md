@@ -48,7 +48,7 @@ informative:
   RATS-Arch: RFC9334
   BUILD-W-HTTP: BCP56
   REST-IoT: I-D.irtf-t2trg-rest-iot
-  RFC4151:
+  TAG: RFC4151
 
 entity:
   SELF: "RFCthis"
@@ -182,7 +182,7 @@ Content-Type: application/eat+cwt; \
 ~~~
 {: #fig-rest-rsp title="Example REST Verification API (response)"}
 
-In both cases, a tag URI {{RFC4151}} identifying the profile is carried as an
+In both cases, a tag URI {{TAG}} identifying the profile is carried as an
 explicit parameter.
 
 # Security Considerations {#seccons}
