@@ -41,12 +41,14 @@ normative:
   UCCS: I-D.ietf-rats-uccs
   CoAP: RFC7252
   MediaTypes: RFC6838
+  URI: RFC3986
+  HTTP: RFC9110
 
 informative:
   RATS-Arch: RFC9334
   BUILD-W-HTTP: BCP56
   REST-IoT: I-D.irtf-t2trg-rest-iot
-  RFC4151:
+  TAG: RFC4151
 
 entity:
   SELF: "RFCthis"
@@ -135,6 +137,18 @@ expectation being that a certain EAT profile automatically obtains a media type
 derived from the base (e.g., `application/eat+cwt)` by populating the
 `eat_profile` parameter with the corresponding OID or URL.
 
+When the parameterised version of the EAT media type is used in HTTP (for
+example, with the "Content-Type" and "Accept" headers), and the value is an
+absolute URI ({{Section 4.3 of URI}}), the `parameter-value` ({{Appendix A of
+HTTP}}) MUST use the `quoted-string` encoding, e.g.:
+
+> `application/eat+jwt; eat_profile="tag:evidence.example,2022"`
+
+Instead, when the EAT profile is an OID, the `token` encoding (i.e., without
+quotes) can be used, e.g.:
+
+> `application/eat+cwt; eat_profile=2.999.1`.
+
 # Examples
 
 The example in {{fig-rest-req}} illustrates the usage of EAT media types for
@@ -168,7 +182,7 @@ Content-Type: application/eat+cwt; \
 ~~~
 {: #fig-rest-rsp title="Example REST Verification API (response)"}
 
-In both cases, a tag URI {{RFC4151}} identifying the profile is carried as an
+In both cases, a tag URI {{TAG}} identifying the profile is carried as an
 explicit parameter.
 
 # Security Considerations {#seccons}
@@ -603,8 +617,9 @@ Thank you
 Carl Wallace,
 Carsten Bormann,
 Dave Thaler,
-Kathleen Moriarty and
-Michael Richardson
+Kathleen Moriarty,
+Michael Richardson and
+Paul Howard
 for your comments and suggestions.
 
 
