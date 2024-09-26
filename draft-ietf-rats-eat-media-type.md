@@ -269,7 +269,7 @@ Encoding considerations:
 : binary
 
 Security considerations:
-: {{seccons}} of {{&SELF}}
+: {{Section 9 of EAT}}
 
 Interoperability considerations:
 : n/a
@@ -320,7 +320,7 @@ Encoding considerations:
 : 8bit
 
 Security considerations:
-: {{seccons}} of {{&SELF}}
+: {{Section 9 of EAT}} and {{!BCP225}}
 
 Interoperability considerations:
 : n/a
@@ -371,7 +371,7 @@ Encoding considerations:
 : binary
 
 Security considerations:
-: {{seccons}} of {{&SELF}}
+: {{Section 9 of EAT}}
 
 Interoperability considerations:
 : n/a
@@ -422,7 +422,7 @@ Encoding considerations:
 : Same as {{!RFC7159}}
 
 Security considerations:
-: {{seccons}} of {{&SELF}}
+: {{Section 9 of EAT}}
 
 Interoperability considerations:
 : n/a
@@ -473,7 +473,7 @@ Encoding considerations:
 : binary
 
 Security considerations:
-: {{seccons}} of {{&SELF}}
+: {{Section 7 of UCCS}}
 
 Interoperability considerations:
 : n/a
@@ -524,7 +524,7 @@ Encoding considerations:
 : Same as {{!RFC7159}}
 
 Security considerations:
-: {{seccons}} of {{&SELF}}
+: {{Section 7 of UCCS}}
 
 Interoperability considerations:
 : n/a
