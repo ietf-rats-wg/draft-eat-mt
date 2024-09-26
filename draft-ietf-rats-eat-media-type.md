@@ -128,7 +128,7 @@ carry an in-band profile identifier using the `eat_profile` claim (see
 OID or a URI.
 
 The media types defined in this document include an optional `eat_profile`
-parameter that can be used to mirror the homonymous claim of the transported
+parameter that can be used to mirror the `eat_profile` claim of the transported
 EAT.  Exposing the EAT profile at the API layer allows API routers to dispatch
 payloads directly to the profile-specific processor without having to snoop
 into the request bodies.  This design also provides a finer-grained and
