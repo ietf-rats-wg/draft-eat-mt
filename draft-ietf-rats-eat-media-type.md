@@ -619,7 +619,7 @@ Carsten Bormann,
 Dave Thaler,
 Deb Cooley,
 Kathleen Moriarty,
-Michael Richardson and
+Michael Richardson, and
 Paul Howard
 for your comments and suggestions.
 
