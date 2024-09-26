@@ -128,7 +128,7 @@ carry an in-band profile identifier using the `eat_profile` claim (see
 OID or a URI.
 
 The media types defined in this document include an optional `eat_profile`
-parameter that can be used to mirror the homonymous claim of the transported
+parameter that can be used to mirror the `eat_profile` claim of the transported
 EAT.  Exposing the EAT profile at the API layer allows API routers to dispatch
 payloads directly to the profile-specific processor without having to snoop
 into the request bodies.  This design also provides a finer-grained and
@@ -269,7 +269,7 @@ Encoding considerations:
 : binary
 
 Security considerations:
-: {{seccons}} of {{&SELF}}
+: {{Section 9 of EAT}}
 
 Interoperability considerations:
 : n/a
@@ -320,7 +320,7 @@ Encoding considerations:
 : 8bit
 
 Security considerations:
-: {{seccons}} of {{&SELF}}
+: {{Section 9 of EAT}} and {{!BCP225}}
 
 Interoperability considerations:
 : n/a
@@ -371,7 +371,7 @@ Encoding considerations:
 : binary
 
 Security considerations:
-: {{seccons}} of {{&SELF}}
+: {{Section 9 of EAT}}
 
 Interoperability considerations:
 : n/a
@@ -422,7 +422,7 @@ Encoding considerations:
 : Same as {{!RFC7159}}
 
 Security considerations:
-: {{seccons}} of {{&SELF}}
+: {{Section 9 of EAT}}
 
 Interoperability considerations:
 : n/a
@@ -473,7 +473,7 @@ Encoding considerations:
 : binary
 
 Security considerations:
-: {{seccons}} of {{&SELF}}
+: {{Section 7 of UCCS}}
 
 Interoperability considerations:
 : n/a
@@ -524,7 +524,7 @@ Encoding considerations:
 : Same as {{!RFC7159}}
 
 Security considerations:
-: {{seccons}} of {{&SELF}}
+: {{Section 7 of UCCS}}
 
 Interoperability considerations:
 : n/a
@@ -617,8 +617,9 @@ Thank you
 Carl Wallace,
 Carsten Bormann,
 Dave Thaler,
+Deb Cooley,
 Kathleen Moriarty,
-Michael Richardson and
+Michael Richardson, and
 Paul Howard
 for your comments and suggestions.
 
