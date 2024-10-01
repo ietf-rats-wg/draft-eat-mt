@@ -187,6 +187,11 @@ explicit parameter.
 
 # Security Considerations {#seccons}
 
+Media types only provide clues to the processing application. The application
+must verify that the received data matches the expected format, regardless of
+the advertised media type. Failing to do so could expose the user to security
+risks, such as privilege escalation and cross-protocol attacks.
+
 The security consideration of {{EAT}} and {{UCCS}} apply in full.
 
 # IANA Considerations
@@ -619,8 +624,10 @@ Carsten Bormann,
 Dave Thaler,
 Deb Cooley,
 Kathleen Moriarty,
-Michael Richardson, and
+Michael Richardson,
 Paul Howard
+and
+Tim Hollebeek
 for your comments and suggestions.
 
 
