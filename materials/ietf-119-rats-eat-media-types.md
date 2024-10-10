@@ -5,7 +5,7 @@ autoscale: true
 
 ## [draft-ietf-rats-eat-media-type-05](https://datatracker.ietf.org/doc/draft-ietf-rats-eat-media-type/05)
 
-### RATS WG, IETF 119, Brisbane
+### RATS WG, IETF 119, Brisbane
 
 ---
 
