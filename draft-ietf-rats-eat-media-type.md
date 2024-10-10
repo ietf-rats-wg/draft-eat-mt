@@ -34,6 +34,12 @@ author:
    organization: Linaro
    email: thomas.fossati@linaro.org
 
+contributor:
+ - ins: C. Bormann
+   name: Carsten Bormann
+   org: Universität Bremen TZI
+   contribution: Carsten contributed the definition of UJCS based on RFC 7519.
+
 normative:
   EAT: I-D.ietf-rats-eat
   JWT: RFC7519
@@ -620,7 +626,6 @@ TBD1..6 are to be assigned from the space 256..999.
 
 Thank you
 Carl Wallace,
-Carsten Bormann,
 Dave Thaler,
 Deb Cooley,
 Jouni Korhonen,
