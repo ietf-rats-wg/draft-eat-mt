@@ -6,7 +6,7 @@ slidenumbers: true
 
 [https://datatracker.ietf.org/doc/draft-lundblade-rats-eat-media-type/](https://datatracker.ietf.org/doc/draft-lundblade-rats-eat-media-type)
 
-## RATS WG, IETF 114
+## RATS WG, IETF 114
 
 ---
 
