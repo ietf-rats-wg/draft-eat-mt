@@ -280,7 +280,7 @@ Interoperability considerations:
 : n/a
 
 Published specification:
-: {{media-type}} of {{&SELF}}
+: {{&SELF}}
 
 Applications that use this media type:
 : Attesters, Verifiers, Endorsers and Reference-Value providers, Relying
@@ -331,7 +331,7 @@ Interoperability considerations:
 : n/a
 
 Published specification:
-: {{media-type}} of {{&SELF}}
+: {{&SELF}}
 
 Applications that use this media type
 : Attesters, Verifiers, Endorsers and Reference-Value providers, Relying
@@ -382,7 +382,7 @@ Interoperability considerations:
 : n/a
 
 Published specification:
-: {{media-type}} of {{&SELF}}
+: {{&SELF}}
 
 Applications that use this media type:
 : Attesters, Verifiers, Endorsers and Reference-Value providers, Relying
@@ -433,7 +433,7 @@ Interoperability considerations:
 : n/a
 
 Published specification:
-: {{media-type}} of {{&SELF}}
+: {{&SELF}}
 
 Applications that use this media type
 : Attesters, Verifiers, Endorsers and Reference-Value providers, Relying
@@ -484,7 +484,7 @@ Interoperability considerations:
 : n/a
 
 Published specification:
-: {{media-type}} of {{&SELF}}
+: {{&SELF}}
 
 Applications that use this media type:
 : Attesters, Verifiers, Endorsers and Reference-Value providers, Relying
@@ -535,7 +535,7 @@ Interoperability considerations:
 : n/a
 
 Published specification:
-: {{media-type}} of {{&SELF}}
+: {{&SELF}}
 
 Applications that use this media type
 : Attesters, Verifiers, Endorsers and Reference-Value providers, Relying
