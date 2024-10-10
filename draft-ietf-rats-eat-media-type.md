@@ -39,10 +39,10 @@ normative:
   JWT: RFC7519
   CWT: RFC8392
   UCCS: I-D.ietf-rats-uccs
-  CoAP: RFC7252
   MediaTypes: RFC6838
   URI: RFC3986
   HTTP: RFC9110
+  JSON: RFC8259
 
 informative:
   RATS-Arch: RFC9334
@@ -69,9 +69,9 @@ associated media type for their conveyance, for example when used in RESTful
 APIs ({{fig-api-sd}}).
 
 ~~~ aasvg
-.----.                    .----------.                .----------.
-| RP |                    | Attester |                | Verifier |
-'-+--'                    '----+-----'                '-----+----'
+.---------------.         .----------.             .----------.
+| Relying Party |         | Attester |             | Verifier |
+'-+-------------'         '----+-----'             '--------+-'
   |                            | POST /verify               |
   |                            | EAT(Evidence)              |
   |                            +--------------------------->|
@@ -280,7 +280,7 @@ Interoperability considerations:
 : n/a
 
 Published specification:
-: {{media-type}} of {{&SELF}}
+: {{&SELF}}
 
 Applications that use this media type:
 : Attesters, Verifiers, Endorsers and Reference-Value providers, Relying
@@ -331,7 +331,7 @@ Interoperability considerations:
 : n/a
 
 Published specification:
-: {{media-type}} of {{&SELF}}
+: {{&SELF}}
 
 Applications that use this media type
 : Attesters, Verifiers, Endorsers and Reference-Value providers, Relying
@@ -382,7 +382,7 @@ Interoperability considerations:
 : n/a
 
 Published specification:
-: {{media-type}} of {{&SELF}}
+: {{&SELF}}
 
 Applications that use this media type:
 : Attesters, Verifiers, Endorsers and Reference-Value providers, Relying
@@ -424,7 +424,7 @@ Optional parameters:
   dotted-decimal notation.  The parameter value is case-insensitive.)
 
 Encoding considerations:
-: Same as {{!RFC7159}}
+: Same as {{JSON}}
 
 Security considerations:
 : {{Section 9 of EAT}}
@@ -433,7 +433,7 @@ Interoperability considerations:
 : n/a
 
 Published specification:
-: {{media-type}} of {{&SELF}}
+: {{&SELF}}
 
 Applications that use this media type
 : Attesters, Verifiers, Endorsers and Reference-Value providers, Relying
@@ -484,7 +484,7 @@ Interoperability considerations:
 : n/a
 
 Published specification:
-: {{media-type}} of {{&SELF}}
+: {{&SELF}}
 
 Applications that use this media type:
 : Attesters, Verifiers, Endorsers and Reference-Value providers, Relying
@@ -526,7 +526,7 @@ Optional parameters:
   dotted-decimal notation.  The parameter value is case-insensitive.)
 
 Encoding considerations:
-: Same as {{!RFC7159}}
+: Same as {{JSON}}
 
 Security considerations:
 : {{Section 7 of UCCS}}
@@ -535,7 +535,7 @@ Interoperability considerations:
 : n/a
 
 Published specification:
-: {{media-type}} of {{&SELF}}
+: {{&SELF}}
 
 Applications that use this media type
 : Attesters, Verifiers, Endorsers and Reference-Value providers, Relying
@@ -623,6 +623,7 @@ Carl Wallace,
 Carsten Bormann,
 Dave Thaler,
 Deb Cooley,
+Jouni Korhonen,
 Kathleen Moriarty,
 Michael Richardson,
 Paul Howard
