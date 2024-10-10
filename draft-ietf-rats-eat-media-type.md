@@ -24,7 +24,7 @@ author:
    name: Henk Birkholz
    org: Fraunhofer Institute for Secure Information Technology
    abbrev: Fraunhofer SIT
-   email: henk.birkholz@sit.fraunhofer.de
+   email: henk.birkholz@ietf.contact
    street: Rheinstrasse 75
    code: '64295'
    city: Darmstadt
