@@ -5,7 +5,7 @@ autoscale: true
 
 ## [draft-ietf-rats-eat-media-type-01](https://datatracker.ietf.org/doc/draft-ietf-rats-eat-media-type/01)
 
-### RATS WG, IETF 115, London
+### RATS WG, IETF 115, London
 
 ---
 
