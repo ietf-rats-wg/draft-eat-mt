@@ -106,8 +106,6 @@ integrating EAT-based messages in their flows, for example when using HTTP
 
 This document uses the terms and concepts defined in {{RATS-Arch}}.
 
-{::boilerplate bcp14-tagged}
-
 # EAT Types
 
 {{fig-eat-types}} illustrates the six EAT wire formats and how they relate to
@@ -146,7 +144,7 @@ derived from the base (e.g., `application/eat+cwt)` by populating the
 When the parameterised version of the EAT media type is used in HTTP (for
 example, with the "Content-Type" and "Accept" headers), and the value is an
 absolute URI ({{Section 4.3 of URI}}), the `parameter-value` ({{Appendix A of
-HTTP}}) MUST use the `quoted-string` encoding, e.g.:
+HTTP}}) uses the `quoted-string` encoding, e.g.:
 
 > `application/eat+jwt; eat_profile="tag:evidence.example,2022"`
 
@@ -273,7 +271,7 @@ Required parameters:
 : n/a
 
 Optional parameters:
-: "eat_profile" (EAT profile in string format.  OIDs MUST use the
+: "eat_profile" (EAT profile in string format.  OIDs must use the
   dotted-decimal notation.  The parameter value is case-insensitive.)
 
 Encoding considerations:
@@ -324,7 +322,7 @@ Required parameters:
 : n/a
 
 Optional parameters:
-: "eat_profile" (EAT profile in string format.  OIDs MUST use the
+: "eat_profile" (EAT profile in string format.  OIDs must use the
   dotted-decimal notation.  The parameter value is case-insensitive.)
 
 Encoding considerations:
@@ -375,7 +373,7 @@ Required parameters:
 : n/a
 
 Optional parameters:
-: "eat_profile" (EAT profile in string format.  OIDs MUST use the
+: "eat_profile" (EAT profile in string format.  OIDs must use the
   dotted-decimal notation.  The parameter value is case-insensitive.)
 
 Encoding considerations:
@@ -426,7 +424,7 @@ Required parameters:
 : n/a
 
 Optional parameters:
-: "eat_profile" (EAT profile in string format.  OIDs MUST use the
+: "eat_profile" (EAT profile in string format.  OIDs must use the
   dotted-decimal notation.  The parameter value is case-insensitive.)
 
 Encoding considerations:
@@ -477,7 +475,7 @@ Required parameters:
 : n/a
 
 Optional parameters:
-: "eat_profile" (EAT profile in string format.  OIDs MUST use the
+: "eat_profile" (EAT profile in string format.  OIDs must use the
   dotted-decimal notation.  The parameter value is case-insensitive.)
 
 Encoding considerations:
@@ -528,7 +526,7 @@ Required parameters:
 : n/a
 
 Optional parameters:
-: "eat_profile" (EAT profile in string format.  OIDs MUST use the
+: "eat_profile" (EAT profile in string format.  OIDs must use the
   dotted-decimal notation.  The parameter value is case-insensitive.)
 
 Encoding considerations:
