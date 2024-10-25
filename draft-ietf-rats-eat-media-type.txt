@@ -5,10 +5,10 @@
 Remote ATtestation ProcedureS                               L. Lundblade
 Internet-Draft                                       Security Theory LLC
 Intended status: Standards Track                             H. Birkholz
-Expires: 6 January 2024                                   Fraunhofer SIT
+Expires: 28 April 2025                                    Fraunhofer SIT
                                                               T. Fossati
-                                                                     arm
-                                                             5 July 2023
+                                                                  Linaro
+                                                         25 October 2024
 
 
                             EAT Media Types
@@ -49,11 +49,11 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 6 January 2024.
+   This Internet-Draft will expire on 28 April 2025.
 
 Copyright Notice
 
-   Copyright (c) 2023 IETF Trust and the persons identified as the
+   Copyright (c) 2024 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -83,15 +83,17 @@ Table of Contents
      6.6.  application/eat-bun+json Registration
      6.7.  application/eat-ucs+cbor Registration
      6.8.  application/eat-ucs+json Registration
-     6.9.  Content-Format
+     6.9.  CoAP Content-Format Registrations
    7.  Changelog
-     7.1.   -03
-     7.2.   -02
-     7.3.   -01
+     7.1.   -04
+     7.2.   -03
+     7.3.   -02
+     7.4.   -01
    8.  References
      8.1.  Normative References
      8.2.  Informative References
    Acknowledgments
+   Contributors
    Authors' Addresses
 
 1.  Introduction
@@ -100,22 +102,22 @@ Table of Contents
    require an associated media type for their conveyance, for example
    when used in RESTful APIs (Figure 1).
 
-    .----.                    .----------.                .----------.
-    | RP |                    | Attester |                | Verifier |
-    '-+--'                    '----+-----'                '-----+----'
-      |                            | POST /verify               |
-      |                            | EAT(Evidence)              |
-      |                            +--------------------------->|
-      |                            |                     200 OK |
-      |                            |   EAT(Attestation Results) |
-      |                            |<---------------------------+
-      |                 POST /auth |                            |
-      |   EAT(Attestation Results) |                            |
-      |<---------------------------+                            |
-      | 201 Created                |                            |
-      +--------------------------->|                            |
-      |                            |                            |
-      |                            |                            |
+      .---------------.         .----------.             .----------.
+      | Relying Party |         | Attester |             | Verifier |
+      '-+-------------'         '----+-----'             '--------+-'
+        |                            | POST /verify               |
+        |                            | EAT(Evidence)              |
+        |                            +--------------------------->|
+        |                            |                     200 OK |
+        |                            |   EAT(Attestation Results) |
+        |                            |<---------------------------+
+        |                 POST /auth |                            |
+        |   EAT(Attestation Results) |                            |
+        |<---------------------------+                            |
+        | 201 Created                |                            |
+        +--------------------------->|                            |
+        |                            |                            |
+        |                            |                            |
 
     Figure 1: Conveying RATS conceptual messages in REST APIs using EAT
 
@@ -130,18 +132,13 @@ Table of Contents
 
    This document uses the terms and concepts defined in [RATS-Arch].
 
-   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
-   "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
-   "OPTIONAL" in this document are to be interpreted as described in
-   BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
-   capitals, as shown here.
-
 2.  EAT Types
 
    Figure 2 illustrates the six EAT wire formats and how they relate to
    each other.  [EAT] defines four of them (CWT, JWT and Detached EAT
-   Bundle in its JSON and CBOR flavours), whilst [UCCS] defines the
-   remaining two: UCCS and UJCS.
+   Bundle in its JSON and CBOR flavours), whilst [UCCS] defines UCCS,
+   and we use the abbreviation "UJCS" to refer to unprotected JWT Claims
+   Sets as defined in Section 2 of [JWT].
 
                     .-----.
               .----+ UJCS |<-------------------------.
@@ -191,15 +188,28 @@ Table of Contents
    URI.
 
    The media types defined in this document include an optional
-   eat_profile parameter that can be used to mirror the homonymous claim
-   of the transported EAT.  Exposing the EAT profile at the API layer
-   allows API routers to dispatch payloads directly to the profile-
-   specific processor without having to snoop into the request bodies.
-   This design also provides a finer-grained and scalable type system
-   that matches the inherent extensibility of EAT.  The expectation
-   being that a certain EAT profile automatically obtains a media type
-   derived from the base (e.g., application/eat+cwt) by populating the
-   eat_profile parameter with the corresponding OID or URL.
+   eat_profile parameter that can be used to mirror the eat_profile
+   claim of the transported EAT.  Exposing the EAT profile at the API
+   layer allows API routers to dispatch payloads directly to the
+   profile-specific processor without having to snoop into the request
+   bodies.  This design also provides a finer-grained and scalable type
+   system that matches the inherent extensibility of EAT.  The
+   expectation being that a certain EAT profile automatically obtains a
+   media type derived from the base (e.g., application/eat+cwt) by
+   populating the eat_profile parameter with the corresponding OID or
+   URL.
+
+   When the parameterised version of the EAT media type is used in HTTP
+   (for example, with the "Content-Type" and "Accept" headers), and the
+   value is an absolute URI (Section 4.3 of [URI]), the parameter-value
+   (Appendix A of [HTTP]) uses the quoted-string encoding, e.g.:
+
+      application/eat+jwt; eat_profile="tag:evidence.example,2022"
+
+   Instead, when the EAT profile is an OID, the token encoding (i.e.,
+   without quotes) can be used, e.g.:
+
+      application/eat+cwt; eat_profile=2.999.1.
 
 4.  Examples
 
@@ -232,12 +242,24 @@ Table of Contents
 
              Figure 4: Example REST Verification API (response)
 
-   In both cases, a tag URI [RFC4151] identifying the profile is carried
-   as an explicit parameter.
+   In both cases, a tag URI [TAG] identifying the profile is carried as
+   an explicit parameter.
 
 5.  Security Considerations
 
+   Media types only provide clues to the processing application.  The
+   application must verify that the received data matches the expected
+   format, regardless of the advertised media type, and stop further
+   processing on failure.  Failing to do so could expose the user to
+   security risks, such as privilege escalation and cross-protocol
+   attacks.
+
    The security consideration of [EAT] and [UCCS] apply in full.
+
+   In particular, when using application/eat-ucs+json and application/
+   eat-ucs+cbor the reader should review Section 3 of [UCCS], which
+   contains a detailed discussion about the characteristics of a "Secure
+   Channel" for conveyance of such messages.
 
 6.  IANA Considerations
 
@@ -268,7 +290,7 @@ Table of Contents
    Contact:  RATS WG mailing list (rats@ietf.org), or IETF Security Area
       (saag@ietf.org)
    Author/Change Controller:  Remote ATtestation ProcedureS (RATS)
-      Working Group.  The IESG has change control over this
+      Working Group.  The IETF has change control over this
       registration.
 
 6.2.  Media Types
@@ -304,12 +326,12 @@ Table of Contents
    Subtype name:  eat+cwt
    Required parameters:  n/a
    Optional parameters:  "eat_profile" (EAT profile in string format.
-      OIDs MUST use the dotted-decimal notation.  The parameter value is
+      OIDs must use the dotted-decimal notation.  The parameter value is
       case-insensitive.)
    Encoding considerations:  binary
-   Security considerations:  Section 5 of RFCthis
+   Security considerations:  Section 9 of [EAT]
    Interoperability considerations:  n/a
-   Published specification:  Section 6.2 of RFCthis
+   Published specification:  RFCthis
    Applications that use this media type:  Attesters, Verifiers,
       Endorsers and Reference-Value providers, Relying Parties that need
       to transfer EAT payloads over HTTP(S), CoAP(S), and other
@@ -320,8 +342,7 @@ Table of Contents
    Intended usage:  COMMON
    Restrictions on usage:  none
    Author/Change controller:  IETF
-   Provisional registration:
-      // maybe
+   Provisional registration:  no
 
 6.4.  application/eat+jwt Registration
 
@@ -329,12 +350,12 @@ Table of Contents
    Subtype name:  eat+jwt
    Required parameters:  n/a
    Optional parameters:  "eat_profile" (EAT profile in string format.
-      OIDs MUST use the dotted-decimal notation.  The parameter value is
+      OIDs must use the dotted-decimal notation.  The parameter value is
       case-insensitive.)
    Encoding considerations:  8bit
-   Security considerations:  Section 5 of RFCthis
+   Security considerations:  Section 9 of [EAT] and [BCP225]
    Interoperability considerations:  n/a
-   Published specification:  Section 6.2 of RFCthis
+   Published specification:  RFCthis
    Applications that use this media type  Attesters, Verifiers,
       Endorsers and Reference-Value providers, Relying Parties that need
       to transfer EAT payloads over HTTP(S), CoAP(S), and other
@@ -345,8 +366,7 @@ Table of Contents
    Intended usage:  COMMON
    Restrictions on usage:  none
    Author/Change controller:  IETF
-   Provisional registration:
-      // maybe
+   Provisional registration:  no
 
 6.5.  application/eat-bun+cbor Registration
 
@@ -354,12 +374,12 @@ Table of Contents
    Subtype name:  eat-bun+cbor
    Required parameters:  n/a
    Optional parameters:  "eat_profile" (EAT profile in string format.
-      OIDs MUST use the dotted-decimal notation.  The parameter value is
+      OIDs must use the dotted-decimal notation.  The parameter value is
       case-insensitive.)
    Encoding considerations:  binary
-   Security considerations:  Section 5 of RFCthis
+   Security considerations:  Section 9 of [EAT]
    Interoperability considerations:  n/a
-   Published specification:  Section 6.2 of RFCthis
+   Published specification:  RFCthis
    Applications that use this media type:  Attesters, Verifiers,
       Endorsers and Reference-Value providers, Relying Parties that need
       to transfer EAT payloads over HTTP(S), CoAP(S), and other
@@ -370,8 +390,7 @@ Table of Contents
    Intended usage:  COMMON
    Restrictions on usage:  none
    Author/Change controller:  IETF
-   Provisional registration:
-      // maybe
+   Provisional registration:  no
 
 6.6.  application/eat-bun+json Registration
 
@@ -379,12 +398,12 @@ Table of Contents
    Subtype name:  eat-bun+json
    Required parameters:  n/a
    Optional parameters:  "eat_profile" (EAT profile in string format.
-      OIDs MUST use the dotted-decimal notation.  The parameter value is
+      OIDs must use the dotted-decimal notation.  The parameter value is
       case-insensitive.)
-   Encoding considerations:  Same as [RFC7159]
-   Security considerations:  Section 5 of RFCthis
+   Encoding considerations:  Same as [JSON]
+   Security considerations:  Section 9 of [EAT]
    Interoperability considerations:  n/a
-   Published specification:  Section 6.2 of RFCthis
+   Published specification:  RFCthis
    Applications that use this media type  Attesters, Verifiers,
       Endorsers and Reference-Value providers, Relying Parties that need
       to transfer EAT payloads over HTTP(S), CoAP(S), and other
@@ -395,8 +414,7 @@ Table of Contents
    Intended usage:  COMMON
    Restrictions on usage:  none
    Author/Change controller:  IETF
-   Provisional registration:
-      // maybe
+   Provisional registration:  no
 
 6.7.  application/eat-ucs+cbor Registration
 
@@ -404,12 +422,12 @@ Table of Contents
    Subtype name:  eat-ucs+cbor
    Required parameters:  n/a
    Optional parameters:  "eat_profile" (EAT profile in string format.
-      OIDs MUST use the dotted-decimal notation.  The parameter value is
+      OIDs must use the dotted-decimal notation.  The parameter value is
       case-insensitive.)
    Encoding considerations:  binary
-   Security considerations:  Section 5 of RFCthis
+   Security considerations:  Sections 3 and 7 of [UCCS]
    Interoperability considerations:  n/a
-   Published specification:  Section 6.2 of RFCthis
+   Published specification:  RFCthis
    Applications that use this media type:  Attesters, Verifiers,
       Endorsers and Reference-Value providers, Relying Parties that need
       to transfer EAT payloads over HTTP(S), CoAP(S), and other
@@ -420,8 +438,7 @@ Table of Contents
    Intended usage:  COMMON
    Restrictions on usage:  none
    Author/Change controller:  IETF
-   Provisional registration:
-      // maybe
+   Provisional registration:  no
 
 6.8.  application/eat-ucs+json Registration
 
@@ -429,12 +446,12 @@ Table of Contents
    Subtype name:  eat-ucs+json
    Required parameters:  n/a
    Optional parameters:  "eat_profile" (EAT profile in string format.
-      OIDs MUST use the dotted-decimal notation.  The parameter value is
+      OIDs must use the dotted-decimal notation.  The parameter value is
       case-insensitive.)
-   Encoding considerations:  Same as [RFC7159]
-   Security considerations:  Section 5 of RFCthis
+   Encoding considerations:  Same as [JSON]
+   Security considerations:  Sections 3 and 7 of [UCCS]
    Interoperability considerations:  n/a
-   Published specification:  Section 6.2 of RFCthis
+   Published specification:  RFCthis
    Applications that use this media type  Attesters, Verifiers,
       Endorsers and Reference-Value providers, Relying Parties that need
       to transfer EAT payloads over HTTP(S), CoAP(S), and other
@@ -445,20 +462,14 @@ Table of Contents
    Intended usage:  COMMON
    Restrictions on usage:  none
    Author/Change controller:  IETF
-   Provisional registration:
-      // maybe
+   Provisional registration:  no
 
-6.9.  Content-Format
+6.9.  CoAP Content-Format Registrations
 
-      |  *Issue*: for symmetry reasons we may need a way to pass the
-      |  profile information when using content formats too.  Early
-      |  proposal for a new CoAP option:
-      |  [I-D.fossati-core-parametrized-cf]
-
-   IANA is requested to register a Content-Format number in the "CoAP
-   Content-Formats" sub-registry, within the "Constrained RESTful
-   Environments (CoRE) Parameters" Registry [IANA.core-parameters], as
-   follows:
+   IANA is requested to register the following Content-Format numbers in
+   the "CoAP Content-Formats" sub-registry, within the "Constrained
+   RESTful Environments (CoRE) Parameters" Registry
+   [IANA.core-parameters]:
 
    +==========================+================+======+===========+
    | Content-Type             | Content Coding | ID   | Reference |
@@ -478,23 +489,22 @@ Table of Contents
 
                      Table 2: New Content-Formats
 
-   TBD1..6 are to be assigned from the space 256..999.
-
-   In the registry as defined by Section 12.3 of [CoAP] at the time of
-   writing, the column "Content-Type" is called "Media type" and the
-   column "Content Coding" is called "Encoding".
-   // RFC editor: please remove this paragraph.
+   TBD1..6 are to be assigned from the space 256..9999.
 
 7.  Changelog
 
 
    // RFC editor: please remove this section
 
-7.1.   -03
+7.1.   -04
+
+   *  Early IANA review
+
+7.2.   -03
 
    *  Update references
 
-7.2.   -02
+7.3.   -02
 
    *  Update references
 
@@ -507,7 +517,7 @@ Table of Contents
    *  Move from eat-cwt to eat+cwt (Issue#14 (https://github.com/ietf-
       rats-wg/draft-eat-mt/issues/14))
 
-7.3.   -01
+7.4.   -01
 
    *  Rename profile to eat_profile for consistency with EAT (Issue#4
       (https://github.com/ietf-rats-wg/draft-eat-mt/issues/4))
@@ -523,10 +533,14 @@ Table of Contents
 
 8.1.  Normative References
 
-   [CoAP]     Shelby, Z., Hartke, K., and C. Bormann, "The Constrained
-              Application Protocol (CoAP)", RFC 7252,
-              DOI 10.17487/RFC7252, June 2014,
-              <https://www.rfc-editor.org/rfc/rfc7252>.
+   [BCP225]   Best Current Practice 225,
+              <https://www.rfc-editor.org/info/bcp225>.
+              At the time of writing, this BCP comprises the following:
+
+              Sheffer, Y., Hardt, D., and M. Jones, "JSON Web Token Best
+              Current Practices", BCP 225, RFC 8725,
+              DOI 10.17487/RFC8725, February 2020,
+              <https://www.rfc-editor.org/info/rfc8725>.
 
    [CWT]      Jones, M., Wahlstroem, E., Erdtman, S., and H. Tschofenig,
               "CBOR Web Token (CWT)", RFC 8392, DOI 10.17487/RFC8392,
@@ -534,9 +548,14 @@ Table of Contents
 
    [EAT]      Lundblade, L., Mandyam, G., O'Donoghue, J., and C.
               Wallace, "The Entity Attestation Token (EAT)", Work in
-              Progress, Internet-Draft, draft-ietf-rats-eat-21, 30 June
-              2023, <https://datatracker.ietf.org/doc/html/draft-ietf-
-              rats-eat-21>.
+              Progress, Internet-Draft, draft-ietf-rats-eat-31, 6
+              September 2024, <https://datatracker.ietf.org/doc/html/
+              draft-ietf-rats-eat-31>.
+
+   [HTTP]     Fielding, R., Ed., Nottingham, M., Ed., and J. Reschke,
+              Ed., "HTTP Semantics", STD 97, RFC 9110,
+              DOI 10.17487/RFC9110, June 2022,
+              <https://www.rfc-editor.org/rfc/rfc9110>.
 
    [IANA.core-parameters]
               IANA, "Constrained RESTful Environments (CoRE)
@@ -552,43 +571,42 @@ Table of Contents
               IANA, "Media Types",
               <https://www.iana.org/assignments/media-types>.
 
+   [JSON]     Bray, T., Ed., "The JavaScript Object Notation (JSON) Data
+              Interchange Format", STD 90, RFC 8259,
+              DOI 10.17487/RFC8259, December 2017,
+              <https://www.rfc-editor.org/rfc/rfc8259>.
+
+   [JWT]      Jones, M., Bradley, J., and N. Sakimura, "JSON Web Token
+              (JWT)", RFC 7519, DOI 10.17487/RFC7519, May 2015,
+              <https://www.rfc-editor.org/rfc/rfc7519>.
+
    [MediaTypes]
               Freed, N., Klensin, J., and T. Hansen, "Media Type
               Specifications and Registration Procedures", BCP 13,
               RFC 6838, DOI 10.17487/RFC6838, January 2013,
               <https://www.rfc-editor.org/rfc/rfc6838>.
 
-   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
-              Requirement Levels", BCP 14, RFC 2119,
-              DOI 10.17487/RFC2119, March 1997,
-              <https://www.rfc-editor.org/rfc/rfc2119>.
-
-   [RFC7159]  Bray, T., Ed., "The JavaScript Object Notation (JSON) Data
-              Interchange Format", RFC 7159, DOI 10.17487/RFC7159, March
-              2014, <https://www.rfc-editor.org/rfc/rfc7159>.
-
-   [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
-              2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
-              May 2017, <https://www.rfc-editor.org/rfc/rfc8174>.
-
    [UCCS]     Birkholz, H., O'Donoghue, J., Cam-Winget, N., and C.
               Bormann, "A CBOR Tag for Unprotected CWT Claims Sets",
-              Work in Progress, Internet-Draft, draft-ietf-rats-uccs-05,
-              1 February 2023, <https://datatracker.ietf.org/doc/html/
-              draft-ietf-rats-uccs-05>.
+              Work in Progress, Internet-Draft, draft-ietf-rats-uccs-11,
+              21 October 2024, <https://datatracker.ietf.org/doc/html/
+              draft-ietf-rats-uccs-11>.
+
+   [URI]      Berners-Lee, T., Fielding, R., and L. Masinter, "Uniform
+              Resource Identifier (URI): Generic Syntax", STD 66,
+              RFC 3986, DOI 10.17487/RFC3986, January 2005,
+              <https://www.rfc-editor.org/rfc/rfc3986>.
 
 8.2.  Informative References
 
    [BUILD-W-HTTP]
-              Nottingham, M., "Building Protocols with HTTP", BCP 56,
-              RFC 9205, June 2022.
+              Best Current Practice 56,
+              <https://www.rfc-editor.org/info/bcp56>.
+              At the time of writing, this BCP comprises the following:
 
-   [I-D.fossati-core-parametrized-cf]
-              Fossati, T. and H. Birkholz, "Parametrized Content-Format
-              for CoAP", Work in Progress, Internet-Draft, draft-
-              fossati-core-parametrized-cf-01, 17 October 2022,
-              <https://datatracker.ietf.org/doc/html/draft-fossati-core-
-              parametrized-cf-01>.
+              Nottingham, M., "Building Protocols with HTTP", BCP 56,
+              RFC 9205, DOI 10.17487/RFC9205, June 2022,
+              <https://www.rfc-editor.org/info/rfc9205>.
 
    [RATS-Arch]
               Birkholz, H., Thaler, D., Richardson, M., Smith, N., and
@@ -598,18 +616,28 @@ Table of Contents
 
    [REST-IoT] Keränen, A., Kovatsch, M., and K. Hartke, "Guidance on
               RESTful Design for Internet of Things Systems", Work in
-              Progress, Internet-Draft, draft-irtf-t2trg-rest-iot-11, 11
-              January 2023, <https://datatracker.ietf.org/doc/html/
-              draft-irtf-t2trg-rest-iot-11>.
+              Progress, Internet-Draft, draft-irtf-t2trg-rest-iot-15, 21
+              October 2024, <https://datatracker.ietf.org/doc/html/
+              draft-irtf-t2trg-rest-iot-15>.
 
-   [RFC4151]  Kindberg, T. and S. Hawke, "The 'tag' URI Scheme",
+   [TAG]      Kindberg, T. and S. Hawke, "The 'tag' URI Scheme",
               RFC 4151, DOI 10.17487/RFC4151, October 2005,
               <https://www.rfc-editor.org/rfc/rfc4151>.
 
 Acknowledgments
 
-   Thank you Carl Wallace, Dave Thaler, Michael Richardson for your
-   comments and suggestions.
+   Thank you Carl Wallace, Dave Thaler, Deb Cooley, Éric Vyncke,
+   Francesca Palombini, Jouni Korhonen, Kathleen Moriarty, Michael
+   Richardson, Murray Kucherawy, Orie Steele, Paul Howard, Roman Danyliw
+   and Tim Hollebeek for your comments and suggestions.
+
+Contributors
+
+   Carsten Bormann
+   Universität Bremen TZI
+
+
+   Carsten contributed the definition of UJCS based on RFC 7519.
 
 Authors' Addresses
 
@@ -623,9 +651,9 @@ Authors' Addresses
    Rheinstrasse 75
    64295 Darmstadt
    Germany
-   Email: henk.birkholz@sit.fraunhofer.de
+   Email: henk.birkholz@ietf.contact
 
 
    Thomas Fossati
-   arm
-   Email: thomas.fossati@arm.com
+   Linaro
+   Email: thomas.fossati@linaro.org
