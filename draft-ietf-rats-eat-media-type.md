@@ -579,7 +579,7 @@ Content-Formats" sub-registry, within the "Constrained RESTful Environments
 | application/eat-ucs+json | - | TBD6 | {{&SELF}} |
 {: align="left" title="New Content-Formats"}
 
-TBD1..6 are to be assigned from the space 256..999.
+TBD1..6 are to be assigned from the space 256..9999.
 
 # Changelog
 
