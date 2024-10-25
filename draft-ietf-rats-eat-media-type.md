@@ -199,6 +199,8 @@ and cross-protocol attacks.
 
 The security consideration of {{EAT}} and {{UCCS}} apply in full.
 
+In particular, when using `application/eat-ucs+json` and `application/eat-ucs+cbor` the reader should review {{Section 3 of UCCS}}, which contains a detailed discussion about the characteristics of a "Secure Channel" for conveyance of such messages.
+
 # IANA Considerations
 
 [^to-be-removed]
@@ -483,7 +485,7 @@ Encoding considerations:
 : binary
 
 Security considerations:
-: {{Section 7 of UCCS}}
+: {{Sections 3 and 7 of UCCS}}
 
 Interoperability considerations:
 : n/a
@@ -534,7 +536,7 @@ Encoding considerations:
 : Same as {{JSON}}
 
 Security considerations:
-: {{Section 7 of UCCS}}
+: {{Sections 3 and 7 of UCCS}}
 
 Interoperability considerations:
 : n/a
