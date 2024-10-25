@@ -627,12 +627,17 @@ Thank you
 Carl Wallace,
 Dave Thaler,
 Deb Cooley,
+Éric Vyncke,
+Francesca Palombini,
 Jouni Korhonen,
 Kathleen Moriarty,
 Michael Richardson,
-Paul Howard
-and
+Murray Kucherawy,
+Orie Steele,
+Paul Howard,
 Tim Hollebeek
+and
+Roman Danyliw
 for your comments and suggestions.
 
 
