@@ -635,9 +635,9 @@ Michael Richardson,
 Murray Kucherawy,
 Orie Steele,
 Paul Howard,
-Tim Hollebeek
-and
 Roman Danyliw
+and
+Tim Hollebeek
 for your comments and suggestions.
 
 
