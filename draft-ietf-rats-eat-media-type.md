@@ -34,12 +34,6 @@ author:
    organization: Linaro
    email: thomas.fossati@linaro.org
 
-contributor:
- - ins: C. Bormann
-   name: Carsten Bormann
-   org: Universität Bremen TZI
-   contribution: Carsten contributed the definition of UJCS based on RFC 7519.
-
 normative:
   EAT: I-D.ietf-rats-eat
   JWT: RFC7519
@@ -110,9 +104,7 @@ This document uses the terms and concepts defined in {{RATS-Arch}}.
 
 {{fig-eat-types}} illustrates the six EAT wire formats and how they relate to
 each other.  {{EAT}} defines four of them (CWT, JWT and Detached EAT Bundle in
-its JSON and CBOR flavours), whilst {{UCCS}} defines UCCS, and we use
-the abbreviation "UJCS" to refer to unprotected JWT Claims Sets as
-defined in {{Section 2 of JWT}}.
+its JSON and CBOR flavours), whilst {{UCCS}} defines UCCS and UJCS.
 
 ~~~ aasvg
 {::include misc/EAT-pieces.txt}
@@ -627,6 +619,7 @@ TBD1..6 are to be assigned from the space 256..9999.
 
 Thank you
 Carl Wallace,
+Carsten Bormann,
 Dave Thaler,
 Deb Cooley,
 Éric Vyncke,
